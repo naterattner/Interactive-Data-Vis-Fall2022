@@ -1,39 +1,39 @@
 
 body {
-  font-family: "Source Sans Pro", sans-serif;
-  font-size: 16px;
-  padding: 1em;
+  font-family: "Source Sans Pro", sans-serif !important; 
+  font-size: 16px !important;
+  padding: 1em !important;
 }
 
 h1 {
-  font-size: 3em;
-  margin: 0.25em 0;
+  font-size: 3em !important;
+  margin: 0.25em 0 !important;
 }
 
 h3 {
-  font-size: 2em;
-  margin: 0.25em 0;
+  font-size: 2em !important;
+  margin: 0.25em 0 !important;
 }
 
 p {
-  font-size: 1em;
+  font-size: 1em !important;
 }
 
 td, th {
-  border: 1px solid rgb(190,190,190);
-  padding: 10px 20px;
+  border: 1px solid rgb(190,190,190) !important;
+  padding: 10px 20px !important;
 }
 
 th {
-  background-color: rgb(235,235,235);
+  background-color: rgb(235,235,235) !important;
 }
 
 td {
-  text-align: center;
+  text-align: center !important;
 }
 
 .essential {
-  background-color: rgb(255, 255, 191);
+  background-color: rgb(255, 255, 191) !important;
 }
 
 svg {
