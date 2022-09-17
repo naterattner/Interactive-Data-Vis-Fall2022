@@ -21,3 +21,7 @@ p {
 section {
   padding: 2em 0;
 }
+
+button {
+  margin-top: 10px;
+}
