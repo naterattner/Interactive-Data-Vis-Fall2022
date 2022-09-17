@@ -18,3 +18,25 @@ h3 {
 p {
   font-size: 1em;
 }
+
+td, th {
+  border: 1px solid rgb(190,190,190);
+  padding: 10px 20px;
+}
+
+th {
+  background-color: rgb(235,235,235);
+}
+
+td {
+  text-align: center;
+}
+
+.essential {
+  background-color: rgb(255, 255, 191);
+}
+
+svg {
+  /* border: 1px dotted black; */
+  
+}
