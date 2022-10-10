@@ -1,7 +1,9 @@
+
+/* Note: Return to this and try to flip the bars to face the other way if time allows before due */
 /* reference: https://bl.ocks.org/hrecht/f84012ee860cb4da66331f18d588eee3 */
 
 /* CONSTANTS AND GLOBALS */
-//we need some room on the left for labels
+//we need some room on the right for labels
 var margin = {
   top: 15,
   right: 60,
