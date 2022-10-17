@@ -82,6 +82,7 @@ d3.csv('../data/servicesJobs.csv', d => {
     .data([data]) // data needs to take an []
     .join("path")
     .attr("class", 'line')
+    .attr("stroke", "black")
     .attr("d", d => lineGen(d))
   
   // AREA GENERATOR FUNCTION
