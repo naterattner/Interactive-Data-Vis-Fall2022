@@ -17,3 +17,9 @@ h3 {
 p {
   font-size: 1em;
 }
+
+.heat {
+  stroke-width: 0.25;
+  stroke:#171717;
+  
+}
