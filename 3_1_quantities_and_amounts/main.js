@@ -69,7 +69,6 @@ function draw() {
   
   // animation
   svg.selectAll("rect")
-  .transition()
   // .delay(1000)
   // .duration(2000)
   // .delay(function(d,i){console.log(i) ; return(i*100)})
@@ -89,7 +88,5 @@ function draw() {
   const yAxis = svg.append("g")
     .call(d3.axisLeft(yScale))
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
-    
 
 }
