@@ -28,7 +28,7 @@ d3.csv('../data/squirrelActivities.csv', d3.autoType)
   const xScale = d3.scaleLinear()
     .domain([0, d3.max(sortedData, d=> d.count)])
     .range([0, width]);
-
+    
   // color scale
   const colorScale = d3.scaleOrdinal()
     .domain(sortedData.map(d => d.activity))
