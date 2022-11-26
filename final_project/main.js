@@ -1,73 +1,90 @@
 /* CONSTANTS AND GLOBALS */
 const width = window.innerWidth * 0.7,
   height = window.innerHeight * 0.7,
-  margin = { top: 20, bottom: 60, left: 60, right: 40 },
-  radius = 5,
-  colors = {national: '#FF7F50', american: '#28A99E'}
-  ;
-  
+  margin = { top: 20, bottom: 50, left: 60, right: 60 },
+  radius = 3;
+
+/*
+this extrapolated function allows us to replace the "G" with "B" min the case of billions.
+we cannot do this in the .tickFormat() because we need to pass a function as an argument,
+and replace needs to act on the text (result of the function).
+*/
+// const formatBillions = (num) => d3.format(".2s")(num).replace(/G/, 'B')
+// const formatDate = d3.timeFormat("%Y")
+
 // these variables allow us to access anything we manipulate in init() but need access to in draw().
 // All these variables are empty before we assign something to them.
 let svg;
-let xScale;
+let xScale; // maybe move this to const -- won't change by data
 let yScale;
-let colorScale;
+let yAxis;
+let xAxisGroup; // maybe move this to const -- won't change by data
+let yAxisGroup;
 
 /* APPLICATION STATE */
 let state = {
   data: [],
-  selectedLeague: "All" // + YOUR INITIAL FILTER SELECTION
+  selection: "All", // + YOUR FILTER SELECTION
 };
 
 /* LOAD DATA */
-d3.csv('../data/mlbSeasonStats.csv', d3.autoType).then(raw_data => {
-  // + SET YOUR DATA PATH
-  console.log("data", raw_data);
-  // save our data to application state
-  state.data = raw_data;
-  init();
-});
+// Define a function to parse our date column when loading the csv
+const parseDate = d3.timeParse("%Y-%m-%d")
 
-// /* INITIALIZING FUNCTION */
-// // this will be run *one time* when the data finishes loading in
+// + SET YOUR DATA PATH
+d3.csv('data/format_test.csv', d => {
+  // use custom initializer to reformat the data the way we want it
+  // ref: https://github.com/d3/d3-fetch#dsv
+  return {
+    // date: new Date(d.date),
+    date: parseDate(d.date),
+    category: d.category,
+    series: d.series,
+    value: +d.value
+  }
+})
+  .then(data => {
+    console.log("loaded data:", data);
+    state.data = data;
+    init();
+  });
+
+/* INITIALIZING FUNCTION */
+// this will be run *one time* when the data finishes loading in
 function init() {
   // + SCALES
-  xScale = d3.scaleLinear()
-    .domain(d3.extent(state.data, d => d.strikeouts))
-    .range([margin.left, width - margin.right])
+  xScale = d3.scaleTime()
+    .domain(d3.extent(state.data, d => d.date))
+    .range([margin.right, width - margin.left])
 
   yScale = d3.scaleLinear()
-    .domain(d3.extent(state.data, d => d.homeruns))
-    .range([height - margin.bottom, margin.bottom])
-  
-  colorScale = d3.scaleOrdinal()
-    .domain(["American", "National"])
-    .range([colors.national, colors.american])
+    .domain(d3.extent(state.data, d => d.value))
+    .range([height - margin.bottom, margin.top])
 
   // + AXES
   const xAxis = d3.axisBottom(xScale)
-  const yAxis = d3.axisLeft(yScale)
+    .ticks(6) // limit the number of tick marks showing -- note: this is approximate
+  yAxis = d3.axisLeft(yScale)
+    // .tickFormat(formatBillions)
 
   // + UI ELEMENT SETUP
-  const selectElement = d3.select("#dropdown") // select drowpdown element from HTML
-  // add in dropdown options
-  selectElement
-    .selectAll("option")
-    .data([ // can do this programmatically also if we want
-      { key: "All", label: "All" }, // doesn't exist in data, we're adding this as an extra option
-      { key: "National", label: "National" },
-      { key: "American", label: "American" }])
-    .join("option")
-    .attr("value", d => d.key) // set the key to the 'value' -- what we will use to FILTER our data later
-    .text(d => d.label); // set the label to text -- easier for the user to read than the key
+  const selectElement = d3.select("#dropdown")
 
-  // set up our event listener
+  // add in dropdown options from the unique values in the data
+  selectElement.selectAll("option")
+    .data([
+      // manually add the first value
+      "Select filter",
+      // add in all the unique values from the dataset
+      ...new Set(state.data.map(d => d.category))])
+    .join("option")
+    .attr("attr", d => d)
+    .text(d => d)
+
+  // + SET SELECT ELEMENT'S DEFAULT VALUE (optional)
   selectElement.on("change", event => {
-    // 'event' holds all the event information that triggered this callback
-    console.log("DROPDOWN CALLBACK: new value is", event.target.value);
-    // save this new selection to application state
-    state.selectedLeague = event.target.value
-    console.log("NEW STATE:", state);
+    state.selection = event.target.value
+    console.log('state has been updated to: ', state)
     draw(); // re-draw the graph based on this new selection
   });
 
@@ -78,83 +95,66 @@ function init() {
     .attr("height", height)
 
   // + CALL AXES
-  const xAxisGroup = svg.append("g")
-    .attr("class", 'xAxis')
-    .attr("transform", `translate(${0}, ${height - margin.bottom})`) // move to the bottom
+  xAxisGroup = svg.append("g")
+    .attr("class", "xAxis")
+    .attr("transform", `translate(${0}, ${height - margin.bottom})`)
     .call(xAxis)
 
-  const yAxisGroup = svg.append("g")
-    .attr("class", 'yAxis')
-    .attr("transform", `translate(${margin.left}, ${0})`) // align with left margin
-    .call(yAxis)
-  
-  // add labels - xAxis
   xAxisGroup.append("text")
-    .attr("class", 'axis-title')
-    .attr("x", width / 2)
-    .attr("y", 40)
-    .attr("text-anchor", "middle")
-    .text("Strikeouts")
+    .attr("class", 'xLabel')
+    .attr("transform", `translate(${width / 2}, ${35})`)
+    .text("Year")
 
-  // add labels - yAxis
+  yAxisGroup = svg.append("g")
+    .attr("class", "yAxis")
+    .attr("transform", `translate(${margin.right}, ${0})`)
+    .call(yAxis)
+
   yAxisGroup.append("text")
-    .attr("class", 'axis-title')
-    .attr("x", -40)
-    .attr("y", height / 2)
-    .attr("writing-mode", "vertical-lr")
-    .attr("text-anchor", "middle")
-    .text("Home Runs")
+    .attr("class", 'yLabel')
+    .attr("transform", `translate(${-45}, ${height / 2})`)
+    .attr("writing-mode", 'vertical-rl')
+    .text("Population")
 
   draw(); // calls the draw function
 }
 
-// /* DRAW FUNCTION */
-// // we call this every time there is an update to the data/state
+/* DRAW FUNCTION */
+// we call this everytime there is an update to the data/state
 function draw() {
-
   // + FILTER DATA BASED ON STATE
   const filteredData = state.data
-    .filter(d => state.selectedLeague === "All" || state.selectedLeague === d.league)
+    .filter(d => d.category === state.selection)
+    
+  console.log(filteredData)
 
-  const dot = svg
-    .selectAll("circle")
-    .data(filteredData, d => d.team)
-    .join(
-      // + HANDLE ENTER SELECTION
-      enter => enter.append("circle")
-        // .attr("r", radius)
-        .attr("fill", d => colorScale(d.league))
-        .attr("cx", d => xScale(d.strikeouts))
-        .attr("cy", d => yScale(d.homeruns))
-        .attr("r", 0)// start dots at radius 0
-        .call(sel => sel.transition()
-          .duration(1000)
-          .attr("r", radius) // transition to actual radius
-        ),
 
-      // + HANDLE UPDATE SELECTION
-      update => update
-        .call(sel => sel
-          .transition()
-          .duration(1000)
-          // .attr("r", radius * 1.5) // increase radius size
-          .style("stroke", "#646464")
-          .style("stroke-width", 3)
-          .transition()
-          .duration(1000)
-          // .attr("r", radius) // bring it back to original size
-          // .style("stroke", "#646464")
-          .style("stroke-width", 0)
-        ),
+  const groupedData = d3.group(filteredData, d => d.series);
+  console.log(groupedData)
 
-      // + HANDLE EXIT SELECTION
-      exit => exit
-        .call(sel => sel
-          .attr("r", radius)
-          .transition()
-          .duration(1000)
-          .attr("r", 0)
-          .remove()
-        )
-    );  
+    
+  // + UPDATE SCALE(S), if needed
+  yScale.domain([0, d3.max(filteredData, d => d.value)])
+  // + UPDATE AXIS/AXES, if needed
+  yAxisGroup
+    .transition()
+    .duration(1000)
+    .call(yAxis.scale(yScale))// need to udpate the scale
+
+  // specify line generator function
+  const lineGen = d3.line()
+    .x(d => xScale(d.date))
+    .y(d => yScale(d.value))
+    
+
+  // + DRAW LINE AND/OR AREA
+  svg.selectAll(".line")
+    .data([filteredData]) // data needs to take an []
+    .join("path")
+    .attr("class", 'line')
+    .attr("fill", "none")
+    .attr("stroke", "black")
+    .transition()
+    .duration(1000)
+    .attr("d", d => lineGen(d))
 }

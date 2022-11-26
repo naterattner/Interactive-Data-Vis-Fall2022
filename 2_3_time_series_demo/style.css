@@ -1,0 +1,29 @@
+body {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 16px;
+  padding: 1em;
+}
+
+h1 {
+  font-size: 3em;
+  margin: 0.25em 0;
+}
+
+h3 {
+  font-size: 2em;
+  margin: 0.25em 0;
+}
+
+p {
+  font-size: 1em;
+}
+
+.line {
+  stroke-width:2.5px;
+  stroke: #FF7F50;
+  fill:none;
+}
+
+.line-area {
+  fill: #f5c9b9;
+}
