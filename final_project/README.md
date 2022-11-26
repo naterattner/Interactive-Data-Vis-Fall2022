@@ -18,7 +18,7 @@ My initial idea is to do this as a sort of two-part dashboard. The first would b
 
 
 ## Sketch
-![Final project wireframe](https://github.com/naterattner/Interactive-Data-Vis-Fall2022/final_project/imgs/final_project_wireframe.png)
+![Final project wireframe](https://github.com/naterattner/Interactive-Data-Vis-Fall2022/blob/main/final_project/imgs/final_project_wireframe.png)
 
 
 ## Project Plan
