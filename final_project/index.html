@@ -7,8 +7,15 @@
   </head>
   <body>
     <h3>Headline goes here</h3>
-    <label for="dropdown">Filter Selection</label>
-    <select id="dropdown" name="dropdown"></select>
+    <label for="category-dropdown">Filter Category</label>
+    <select id="category-dropdown" name="category-dropdown"></select>
+
+    <button onclick="addOne()">Overall</button>
+    <button onclick="addOne()">By type</button>
+    <button onclick="addOne()">By region</button>
+
+    <label for="series-dropdown">Filter Series</label>
+    <select id="series-dropdown" name="series-dropdown"></select>
     <div id="container"></div>
     <script src="../lib/d3.js"></script>
     <script src="main.js"></script>

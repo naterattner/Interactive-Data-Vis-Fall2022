@@ -25,6 +25,7 @@ let yAxisGroup;
 let state = {
   data: [],
   selection: "All", // + YOUR FILTER SELECTION
+  highlight: "None", // YOUR HIGHLIGHT SELECTION
 };
 
 /* LOAD DATA */
@@ -61,14 +62,18 @@ function init() {
     .domain(d3.extent(state.data, d => d.value))
     .range([height - margin.bottom, margin.top])
 
+
   // + AXES
   const xAxis = d3.axisBottom(xScale)
     .ticks(6) // limit the number of tick marks showing -- note: this is approximate
   yAxis = d3.axisLeft(yScale)
     // .tickFormat(formatBillions)
 
+
   // + UI ELEMENT SETUP
-  const selectElement = d3.select("#dropdown")
+
+  // Dropdown for category filter
+  const selectElement = d3.select("#category-dropdown")
 
   // add in dropdown options from the unique values in the data
   selectElement.selectAll("option")
@@ -126,15 +131,33 @@ function draw() {
   const filteredData = state.data
     .filter(d => d.category === state.selection)
   
-  delete filteredData['category'];
-    
-  console.log(filteredData)
-  // console.log(d3.group(filteredData, d => d.series))
-
-
+  // GROUP DATA BY SERIES SO THAT WE CAN CHART INDIVIDUAL LINES
   const groupedData = d3.group(filteredData, d => d.series)
-  console.log(groupedData)
 
+  // UPDATE SERIES HIGHLIGHT DROPDOWN
+  const highlightElement = d3.select("#series-dropdown")
+
+  // add in dropdown options from the unique values in the data
+  highlightElement.selectAll("option")
+    .data([
+      // manually add the first value
+      "Highlight series",
+      // add in all the unique values from the dataset
+      ...new Set(filteredData.map(d => d.series))])
+    .join("option")
+    .attr("attr", d => d)
+    .text(d => d)
+
+  // change line color based on selection
+  highlightElement.on("change", event => {
+    state.highlight = event.target.value
+    console.log('highlight has been updated to: ', state)
+    console.log(state.highlight)
+    highlight(state.highlight);
+    //append a class or otherwise change line's fill to red
+    // could trigger another function that selects lines by class but we need to add unque classes to each line for this to work
+    // draw(); // re-draw the graph based on this new selection
+  });
     
   // + UPDATE SCALE(S), if needed
   yScale.domain([0, d3.max(filteredData, d => d.value)])
@@ -149,15 +172,30 @@ function draw() {
     .x(d => xScale(d.date))
     .y(d => yScale(d.value))  
 
+// console.log(Array.from(groupedData)[0][0])
+// console.log(Array.from(groupedData)[1][0])
+  
+
   // + DRAW LINE AND/OR AREA
   svg.selectAll(".line")
     .data(groupedData)
     .join("path")
     .attr("class", 'line')
+    .attr("data-name", d => d[0]) // give each line a data-name attribute of its series name
     .attr("fill", "none")
     .attr("stroke", "black")
     .transition()
     .duration(1000)
     .attr("d", d => lineGen(d[1]))
+    // .attr("class", d => d.series)
 
 }
+
+/* HIGHLIGHT FUNCTION */
+// This applies a class based on state.highlight
+function highlight(seriesName) {
+  // d3.select.attr('series-name') == seriesName
+  // d3.selectAll("[data-name=northeast]")
+  d3.selectAll("[data-name=${seriesName}]") // change this to properly insert seriesName variable
+  .attr("stroke", "red")
+};
