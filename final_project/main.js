@@ -125,11 +125,14 @@ function draw() {
   // + FILTER DATA BASED ON STATE
   const filteredData = state.data
     .filter(d => d.category === state.selection)
+  
+  delete filteredData['category'];
     
   console.log(filteredData)
+  // console.log(d3.group(filteredData, d => d.series))
 
 
-  const groupedData = d3.group(filteredData, d => d.series);
+  const groupedData = d3.group(filteredData, d => d.series)
   console.log(groupedData)
 
     
@@ -144,17 +147,17 @@ function draw() {
   // specify line generator function
   const lineGen = d3.line()
     .x(d => xScale(d.date))
-    .y(d => yScale(d.value))
-    
+    .y(d => yScale(d.value))  
 
   // + DRAW LINE AND/OR AREA
   svg.selectAll(".line")
-    .data([filteredData]) // data needs to take an []
+    .data(groupedData)
     .join("path")
     .attr("class", 'line')
     .attr("fill", "none")
     .attr("stroke", "black")
     .transition()
     .duration(1000)
-    .attr("d", d => lineGen(d))
+    .attr("d", d => lineGen(d[1]))
+
 }
