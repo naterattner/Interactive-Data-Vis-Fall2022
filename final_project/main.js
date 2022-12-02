@@ -216,11 +216,11 @@ function changeCategory(buttonName) {
 
   // remove the class "pressed" from all buttons
   d3.selectAll(".category-button")
-    .attr("class", "category-button")
+    .classed("pressed", false)
 
   //give the clicked button a class for styling as "pressed"
   d3.select('#' + buttonName)
-  .attr("class", "category-button pressed")
+  .classed("pressed", true)
 
   // set highlight to the series with the highest value for the most recent month
   // const largestSeries = state.data
@@ -253,7 +253,7 @@ function changeCategory(buttonName) {
 // HIGHLIGHT FUNCTION
 function applyLineClass(){
   svg.selectAll(".line")
-    .attr("class", "line")
+    // .attr("class", "line")
 }
 // This applies a class based on state.highlight
 function highlight(seriesName) {
@@ -262,11 +262,12 @@ function highlight(seriesName) {
   // - bring line to front
   // - reset filter to default when you change category?
   svg.selectAll(".line")
-    .attr("class", "line") //make the class line only -- maybe remove later
+    .classed("highlight", false) //remove/add a class for highlight, though for now we're styline with JS
     .attr("stroke", "#D3D3D3")
     .attr("stroke-width", 1.5)
 
   svg.selectAll("[data-name=" + seriesName + "]")
+    .classed("highlight", true)
     .attr("class", "highlight line")
     .raise() // bring to front
     .transition()
