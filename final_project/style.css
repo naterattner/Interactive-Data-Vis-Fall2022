@@ -18,6 +18,15 @@ p {
   font-size: 1em;
 }
 
-.line .highlight {
-  stroke:red;
+
+.line {
+  stroke:#D3D3D3;
+  stroke-width:1.5;
+}
+
+/* highlight needs to come after .line so that it overrules the black stroke */
+.highlight { 
+  stroke: #9380B6;
+  stroke-width:3;
+
 }

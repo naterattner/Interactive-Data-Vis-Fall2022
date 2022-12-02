@@ -153,7 +153,9 @@ function draw() {
     state.highlight = event.target.value
     console.log('highlight has been updated to: ', state)
     console.log(state.highlight)
+    // applyLineClass()
     highlight(state.highlight);
+    
     //append a class or otherwise change line's fill to red
     // could trigger another function that selects lines by class but we need to add unque classes to each line for this to work
     // draw(); // re-draw the graph based on this new selection
@@ -183,7 +185,7 @@ function draw() {
     .attr("class", 'line')
     .attr("data-name", d => d[0]) // give each line a data-name attribute of its series name
     .attr("fill", "none")
-    .attr("stroke", "black")
+    // .attr("stroke", "black")
     .transition()
     .duration(1000)
     .attr("d", d => lineGen(d[1]))
@@ -192,10 +194,17 @@ function draw() {
 }
 
 /* HIGHLIGHT FUNCTION */
+function applyLineClass(){
+  svg.selectAll(".line")
+    .attr("class", "line")
+}
 // This applies a class based on state.highlight
 function highlight(seriesName) {
-  // d3.select.attr('series-name') == seriesName
-  // d3.selectAll("[data-name=northeast]")
-  d3.selectAll("[data-name=${seriesName}]") // change this to properly insert seriesName variable
-  .attr("stroke", "red")
+  //select all lines and remove .highlight, then select the specific line and add .highlight
+
+  svg.selectAll(".line")
+    .attr("class", "line")
+
+  svg.selectAll("[data-name=" + seriesName + "]")
+    .attr("class", "highlight line")
 };
