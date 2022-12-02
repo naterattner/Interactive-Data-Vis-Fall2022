@@ -120,6 +120,7 @@ function init() {
     .attr("transform", `translate(${-45}, ${height / 2})`)
     .attr("writing-mode", 'vertical-rl')
     .text("Population")
+   
 
   draw(); // calls the draw function
 }
@@ -179,7 +180,7 @@ function draw() {
   
 
   // + DRAW LINE AND/OR AREA
-  svg.selectAll(".line")
+  const path = svg.selectAll(".line")
     .data(groupedData)
     .join("path")
     .attr("class", 'line')
@@ -193,8 +194,12 @@ function draw() {
       .attr("stroke-width", "1.5")
       
       
-    // .attr("class", d => d.series)
+    
 
+      
+      
+
+    
 }
 
 
@@ -234,12 +239,6 @@ function changeCategory(buttonName) {
 
   //give the clicked button a class for styling as "pressed"
 }
-
-
-
-
-
-
 
 
 
