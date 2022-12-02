@@ -10,11 +10,11 @@
     <label for="category-dropdown">Filter Category</label>
     <select id="category-dropdown" name="category-dropdown"></select>
 
-    <button onclick="filterData()">Overall</button>
-    <button onclick="filterData()">By type</button>
-    <button onclick="filterData()">By region</button>
+    <button class="category-button pressed" id='overall' onclick="changeCategory('overall')">Overall</button>
+    <button class="category-button" id='type' onclick="changeCategory('type')">By type</button>
+    <button class="category-button" id='region' onclick="changeCategory('region')">By region</button>
 
-    <label for="series-dropdown">Filter Series</label>
+    <label for="series-dropdown">Highlight a series</label>
     <select id="series-dropdown" name="series-dropdown"></select>
     <div id="container"></div>
     <script src="../lib/d3.js"></script>

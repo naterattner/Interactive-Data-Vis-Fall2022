@@ -24,7 +24,7 @@ let yAxisGroup;
 /* APPLICATION STATE */
 let state = {
   data: [],
-  selection: "All", // + YOUR FILTER SELECTION
+  selection: "overall", // + YOUR FILTER SELECTION -- start with overall loaded
   highlight: "None", // YOUR HIGHLIGHT SELECTION
 };
 
@@ -197,7 +197,60 @@ function draw() {
 
 }
 
-/* HIGHLIGHT FUNCTION */
+
+
+
+
+
+
+
+
+
+
+// FUNCTION TO CHANGE CATEGORIES WITH BUTTONS
+function changeCategory(buttonName) {
+  // change state depending on button clicked and then re-draw with draw()
+  state.selection = buttonName
+  console.log('state has been updated to: ', state)
+  draw();
+
+  // remove the class "pressed" from all buttons
+  d3.selectAll(".category-button")
+    .attr("class", "category-button")
+
+  //give the clicked button a class for styling as "pressed"
+  d3.select('#' + buttonName)
+  .attr("class", "category-button pressed")
+
+  // set highlight to the series with the highest value for the most recent month
+  // const largestSeries = state.data
+  //   .filter(d => d.category === state.selection)
+    
+  // groupedData = d3
+  //   .group(largestSeries, d => d.series)
+    
+  //   console.log(groupedData)
+
+
+  //give the clicked button a class for styling as "pressed"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// HIGHLIGHT FUNCTION
 function applyLineClass(){
   svg.selectAll(".line")
     .attr("class", "line")

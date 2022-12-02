@@ -31,3 +31,15 @@ p {
   transition: stroke 1s ease;
   transition: stroke-width 1s ease; */
 }
+
+button {
+  background-color: lightgrey;
+}
+
+button:hover {
+  background-color: grey;
+}
+
+button.pressed {
+  background-color: grey;
+}
