@@ -185,10 +185,14 @@ function draw() {
     .attr("class", 'line')
     .attr("data-name", d => d[0]) // give each line a data-name attribute of its series name
     .attr("fill", "none")
-    // .attr("stroke", "black")
-    .transition()
-    .duration(1000)
+    .attr("stroke", "#D3D3D3")
+    .attr("stroke-width", "0")
     .attr("d", d => lineGen(d[1]))
+    .transition()
+      .duration(500)
+      .attr("stroke-width", "1.5")
+      
+      
     // .attr("class", d => d.series)
 
 }
@@ -201,10 +205,18 @@ function applyLineClass(){
 // This applies a class based on state.highlight
 function highlight(seriesName) {
   //select all lines and remove .highlight, then select the specific line and add .highlight
-
+  // other things to do in this function:
+  // - bring line to front
+  // - reset filter to default when you change category?
   svg.selectAll(".line")
-    .attr("class", "line")
+    .attr("class", "line") //make the class line only -- maybe remove later
+    .attr("stroke", "#D3D3D3")
+    .attr("stroke-width", 1.5)
 
   svg.selectAll("[data-name=" + seriesName + "]")
     .attr("class", "highlight line")
+    .raise() // bring to front
+    .transition()
+      .attr("stroke", "#9380B6")
+      .attr("stroke-width", 3)
 };

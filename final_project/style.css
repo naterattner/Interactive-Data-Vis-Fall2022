@@ -20,13 +20,14 @@ p {
 
 
 .line {
-  stroke:#D3D3D3;
-  stroke-width:1.5;
+  /* stroke:#D3D3D3;
+  stroke-width:1.5; */
 }
 
 /* highlight needs to come after .line so that it overrules the black stroke */
 .highlight { 
-  stroke: #9380B6;
+  /* stroke: #9380B6;
   stroke-width:3;
-
+  transition: stroke 1s ease;
+  transition: stroke-width 1s ease; */
 }
