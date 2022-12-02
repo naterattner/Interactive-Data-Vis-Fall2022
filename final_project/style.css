@@ -1,7 +1,12 @@
+/* PAGE STYLES*/
 body {
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 16px;
   padding: 1em;
+}
+
+#content-wrapper{
+  width: 95%;
 }
 
 h1 {
@@ -16,12 +21,117 @@ h3 {
 
 p {
   font-size: 1em;
+  font-weight:300;
 }
 
+#headline {
+  text-align:center;
+  font-weight:400;
+  font-family: 'Oswald';
+}
+
+.intro-container{
+  width:70%;
+  margin:0 auto;
+  margin-bottom:30px;
+}
+
+hr{
+  width:50%;
+  margin-bottom:20px;
+}
+
+/* UI ELEMENT STYLES*/
+.ui-elements {
+  margin-bottom:30px;
+}
+
+#chart-title{
+  text-align: center;
+  font-size: 1.1em;
+  font-weight: 600;
+  margin-bottom: 10px;
+  
+}
+
+.category-button-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom:5px;
+}
+
+.highlight-filter-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.highlight-filter-block label{
+  margin-right: 5px;
+  font-size:0.9em;
+  font-style:italic;
+  font-weight:300;
+}
+
+#series-dropdown {
+  font-size:0.9em;
+  font-weight:200 !important;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid #747474;
+  text-align:center;
+  /* font-style:italic; */
+}
+
+button {
+  text-transform: uppercase;
+  margin: 7px;
+  font-size:0.8em;
+
+  background-color: #FFFFFF;
+  border: 1px solid #222222;
+  border-radius: 3px;
+  box-sizing: border-box;
+  color: #222222;
+  cursor: pointer;
+  display: inline-block;
+  line-height: 20px;
+  outline: none;
+  padding: 5px 8px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
+  user-select: none;
+  -webkit-user-select: none;
+  width: auto;
+}
+
+button:hover {
+  background-color: #f0f0f0;
+  /* border-color: #000000; */
+}
+
+button.pressed {
+  background-color: #f0f0f0;
+  /* border-color: #000000; */
+  transform: scale(1.02);
+}
+
+/* CHART STYLES */
+#chart-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .line {
   /* stroke:#D3D3D3;
   stroke-width:1.5; */
+  mix-blend-mode: multiply;
 }
 
 /* highlight needs to come after .line so that it overrules the black stroke */
@@ -30,16 +140,5 @@ p {
   stroke-width:3;
   transition: stroke 1s ease;
   transition: stroke-width 1s ease; */
-}
-
-button {
-  background-color: lightgrey;
-}
-
-button:hover {
-  background-color: grey;
-}
-
-button.pressed {
-  background-color: grey;
+  mix-blend-mode: normal;
 }

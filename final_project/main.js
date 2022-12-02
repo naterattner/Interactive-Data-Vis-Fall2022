@@ -72,29 +72,29 @@ function init() {
 
   // + UI ELEMENT SETUP
 
-  // Dropdown for category filter
-  const selectElement = d3.select("#category-dropdown")
+  // // Dropdown for category filter
+  // const selectElement = d3.select("#category-dropdown")
 
-  // add in dropdown options from the unique values in the data
-  selectElement.selectAll("option")
-    .data([
-      // manually add the first value
-      "Select filter",
-      // add in all the unique values from the dataset
-      ...new Set(state.data.map(d => d.category))])
-    .join("option")
-    .attr("attr", d => d)
-    .text(d => d)
+  // // add in dropdown options from the unique values in the data
+  // selectElement.selectAll("option")
+  //   .data([
+  //     // manually add the first value
+  //     "Select filter",
+  //     // add in all the unique values from the dataset
+  //     ...new Set(state.data.map(d => d.category))])
+  //   .join("option")
+  //   .attr("attr", d => d)
+  //   .text(d => d)
 
-  // + SET SELECT ELEMENT'S DEFAULT VALUE (optional)
-  selectElement.on("change", event => {
-    state.selection = event.target.value
-    console.log('state has been updated to: ', state)
-    draw(); // re-draw the graph based on this new selection
-  });
+  // // + SET SELECT ELEMENT'S DEFAULT VALUE (optional)
+  // selectElement.on("change", event => {
+  //   state.selection = event.target.value
+  //   console.log('state has been updated to: ', state)
+  //   draw(); // re-draw the graph based on this new selection
+  // });
 
   // + CREATE SVG ELEMENT
-  svg = d3.select("#container")
+  svg = d3.select("#chart-container")
     .append("svg")
     .attr("width", width)
     .attr("height", height)
@@ -141,7 +141,7 @@ function draw() {
   highlightElement.selectAll("option")
     .data([
       // manually add the first value
-      "Highlight series",
+      "Use dropdown to highlight",
       // add in all the unique values from the dataset
       ...new Set(filteredData.map(d => d.series))])
     .join("option")

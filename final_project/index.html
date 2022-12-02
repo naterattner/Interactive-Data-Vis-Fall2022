@@ -3,20 +3,48 @@
     <meta charset="utf-8">
     <title>Interactive Data Visualization Tutorial</title>
     <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@200;300;500;600&family=Oswald:wght@400">
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria"> -->
   </head>
   <body>
-    <h3>Headline goes here</h3>
-    <label for="category-dropdown">Filter Category</label>
-    <select id="category-dropdown" name="category-dropdown"></select>
+    <div id="content-wrapper">
+      <h1 id="headline">The Pandemic Business Boom</h1>
+      <div class="intro-container">
+        <p>
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+        </p>
+        <p>
+          Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+        </p>
+        <p>
+          It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        </p>
+        <p>
+          Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. 
+        </p>
+      </div>
 
-    <button class="category-button pressed" id='overall' onclick="changeCategory('overall')">Overall</button>
-    <button class="category-button" id='type' onclick="changeCategory('type')">By type</button>
-    <button class="category-button" id='region' onclick="changeCategory('region')">By region</button>
+      <hr>
+      
+      <!-- <label for="category-dropdown">Filter Category</label> -->
+      <!-- <select id="category-dropdown" name="category-dropdown"></select> -->
+      <div class="ui-elements">
+        <div id="chart-title">Monthly U.S. business applications</div>
+        <div class="category-button-block">
+          <button class="category-button pressed" id='overall' onclick="changeCategory('overall')">Overall</button>
+          <button class="category-button" id='type' onclick="changeCategory('type')">By type</button>
+          <button class="category-button" id='region' onclick="changeCategory('region')">By region</button>
+          <button class="category-button" id='industry' onclick="changeCategory('industry')">By industry</button>
+        </div>
 
-    <label for="series-dropdown">Highlight a series</label>
-    <select id="series-dropdown" name="series-dropdown"></select>
-    <div id="container"></div>
+        <div class="highlight-filter-block">
+        <!-- <label for="series-dropdown">Use dropdown to highlight</label> -->
+        <select id="series-dropdown" name="series-dropdown"></select>
+        </div>
+      </div>
+    
+      <div id="chart-container"></div>
+    </div>
     <script src="../lib/d3.js"></script>
     <script src="main.js"></script>
   </body>
