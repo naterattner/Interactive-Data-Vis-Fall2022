@@ -110,11 +110,6 @@ function init() {
     .attr("transform", `translate(${0}, ${height - margin.bottom})`)
     .call(xAxis)
 
-  // xAxisGroup.append("text")
-  //   .attr("class", 'xLabel')
-  //   .attr("transform", `translate(${width / 2}, ${35})`)
-  //   .text("Year")
-
   yAxisGroup = svg.append("g")
     .attr("class", "yAxis")
     .attr("transform", `translate(${margin.right}, ${0})`)
@@ -122,15 +117,9 @@ function init() {
       .tickSizeInner(-width)
       .tickPadding(10)
       )
-  
 
-
-
-  // yAxisGroup.append("text")
-  //   .attr("class", 'yLabel')
-  //   .attr("transform", `translate(${-45}, ${height / 2})`)
-  //   .attr("writing-mode", 'vertical-rl')
-  //   .text("Population")
+  d3.selectAll(".yAxis line")
+      .style("stroke", "#E0E0E0")
 
   dataPointLabel = svg.append("g")
     .attr("display", "none")
