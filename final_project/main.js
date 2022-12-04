@@ -118,9 +118,6 @@ function init() {
       .tickPadding(10)
       )
 
-  d3.selectAll(".yAxis line")
-      .style("stroke", "#E0E0E0")
-
   dataPointLabel = svg.append("g")
     .attr("display", "none")
     .attr("class", "data-point-label")
@@ -140,6 +137,7 @@ function init() {
 /* DRAW FUNCTION */
 // we call this everytime there is an update to the data/state
 function draw() {
+  
   // + FILTER DATA BASED ON STATE
   const filteredData = state.data
     .filter(d => d.category === state.selection)

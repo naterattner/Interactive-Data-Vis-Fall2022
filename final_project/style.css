@@ -129,7 +129,7 @@ button.pressed {
 }
 
 .yAxis line {
-  /* stroke: #E0E0E0 !important; */
+  stroke: #E0E0E0 !important;
 }
 
 .yAxis text {
