@@ -1,6 +1,6 @@
 /* PAGE STYLES*/
 body {
-  font-family: 'Open Sans', sans-serif !important;;
+  font-family: 'Open Sans', sans-serif !important;
   font-size: 16px !important;
   padding: 1em !important;
 }
@@ -141,4 +141,21 @@ button.pressed {
   transition: stroke 1s ease;
   transition: stroke-width 1s ease; */
   mix-blend-mode: normal !important;
+}
+
+.data-point-label {
+  paint-order: stroke !important;
+  stroke-width: 3 !important;
+  stroke: #FFFFFF !important;
+  text-anchor: middle !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 0.9em !important;
+}
+
+.data-point-label-title {
+  font-weight:700
+}
+
+.data-point-label-body {
+  font-weight:500
 }

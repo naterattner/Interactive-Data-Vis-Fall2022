@@ -20,6 +20,7 @@ let yScale;
 let yAxis;
 let xAxisGroup; // maybe move this to const -- won't change by data
 let yAxisGroup;
+let dataPointLabel;
 
 /* APPLICATION STATE */
 let state = {
@@ -121,6 +122,19 @@ function init() {
     .attr("writing-mode", 'vertical-rl')
     .text("Population")
 
+  dataPointLabel = svg.append("g")
+    .attr("display", "none")
+    .attr("class", "data-point-label")
+
+  dataPointLabel.append("circle")
+    .attr("r", 3)
+    .attr("stroke-width", 0)
+    .attr("fill", "black")
+  
+  dataPointLabel.append("text")
+    // .attr("y", -8)
+    .text(null);
+
   draw(); // calls the draw function
 }
 
@@ -193,23 +207,52 @@ function draw() {
       .attr("stroke-width", "1.5")
       
   // VORONOI AND TOOLTIPS
-  // define functions
-  // function onMouseEnter(datum, index, nodes) {
-  //   console.log({datum, index, nodes})
-  //   console.log(datum.date)
-  //   // console.log(filteredData[index])
-  //   // console.log(filteredData)
-  //   // console.log(this)
-    
-  // }
+  // define constants and functions
 
   function onMouseEnter(d) {
-    console.log(d)
-    // console.log("value")
-    // console.log(d.value)
+    state.highlight = d.series
+    highlight(state.highlight)
+
+    updateDataPointLabel(d, d.date, d.value)
   }
 
   function onMouseLeave() {
+    state.highlight = "None"
+    highlight(state.highlight)
+
+    // dataPointLabel.attr("display", "none")
+  }
+
+  function updateDataPointLabel(d, x, y) {
+    dataPointLabel
+      // .attr("cx", xScale(cx))
+      // .attr("cy", yScale(cy))
+      .attr("transform", `translate(${xScale(x)}, ${yScale(y)})`)
+      .attr("display", null)
+
+      .raise()
+    
+    // d3.select(".data-point-label")
+    // .selectAll("text")
+    //   .text(d.series)
+    const formatDateLabel = d3.timeFormat("%b %Y")
+    const formatNumberLabel = d3.format(".3s")
+
+    let labelText = d3.select(".data-point-label")
+    .selectAll("text")
+
+    labelText.text(d.series)
+      .attr("x", 0)
+      .attr("y", -28)
+      .classed("data-point-label-title", true)
+
+    labelText.append("tspan")
+      .text(`${formatDateLabel(d.date)}: ` + `${formatNumberLabel(d.value)}`)
+      .attr("x", 0)
+      .attr("y", -10)
+      .classed("data-point-label-body", true)
+
+ 
 
   }
 
@@ -236,6 +279,8 @@ function draw() {
     .attr("d", (d,i) => voronoi.renderCell(i))
     .attr("stroke", "salmon")
     .attr("fill", "none")
+    .attr("opacity", 0.2)
+    .attr("pointer-events", "all")
   
   svg.selectAll(".voronoi")
     // .on("mouseenter", onMouseEnter)
@@ -246,39 +291,6 @@ function draw() {
     })
     .on("mouseleave", onMouseLeave)
 
- 
-
-  console.log(voronoi)
-  // function handleVoronoiHover() {
-  //   console.log('Hovering on...')
-  // }
-
-  // function handleMouseEnter(event) {
-  //   // console.log((event, [d]) => tooltip.show(d))
-  //   console.log(event)
-  // }
-
-
-  // d3.selectAll('.voronoi-path').remove()
-  // let voronoi = null
-
-  // voronoi = d3.Delaunay
-  //   .from(filteredData, d => xScale(d.date), d => yScale(d.value))
-  //   .voronoi([0, 0, width, height])
-  //   .render();
-
-  
-  
-  // svg.append("path")
-  //   // .data(filteredData)
-  //   .attr("class", "voronoi-path")
-  //   .attr("fill", "none")
-  //   .attr("stroke", "salmon")
-  //   .attr("d", voronoi)
-  //   .on("mouseenter", handleMouseEnter)
- 
-    
-  
       
       
 
@@ -333,16 +345,18 @@ function changeCategory(buttonName) {
 
 
 // HIGHLIGHT FUNCTION
-function applyLineClass(){
-  svg.selectAll(".line")
-    // .attr("class", "line")
-}
+// function applyLineClass(){
+//   svg.selectAll(".line")
+//     // .attr("class", "line")
+// }
 // This applies a class based on state.highlight
 function highlight(seriesName) {
   //select all lines and remove .highlight, then select the specific line and add .highlight
   // other things to do in this function:
   // - bring line to front
   // - reset filter to default when you change category?
+  console.log("highlighting " + state.highlight)    
+
   svg.selectAll(".line")
     .classed("highlight", false) //remove/add a class for highlight, though for now we're styline with JS
     .attr("stroke", "#D3D3D3")
