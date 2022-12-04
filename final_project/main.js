@@ -120,7 +120,6 @@ function init() {
     .attr("transform", `translate(${-45}, ${height / 2})`)
     .attr("writing-mode", 'vertical-rl')
     .text("Population")
-   
 
   draw(); // calls the draw function
 }
@@ -193,9 +192,93 @@ function draw() {
       .duration(500)
       .attr("stroke-width", "1.5")
       
-      
+  // VORONOI AND TOOLTIPS
+  // define functions
+  // function onMouseEnter(datum, index, nodes) {
+  //   console.log({datum, index, nodes})
+  //   console.log(datum.date)
+  //   // console.log(filteredData[index])
+  //   // console.log(filteredData)
+  //   // console.log(this)
     
+  // }
 
+  function onMouseEnter(d) {
+    console.log(d)
+    // console.log("value")
+    // console.log(d.value)
+  }
+
+  function onMouseLeave() {
+
+  }
+
+  // destroy existing voronoi
+  d3.selectAll('.voronoi').remove()
+  let voronoi = null
+  let delaunay = null
+
+  delaunay = d3.Delaunay.from(
+    filteredData,
+    d => xScale(d.date), 
+    d => yScale(d.value)
+  )
+
+  // create voronoi
+  voronoi = delaunay.voronoi([margin.left, margin.top, width - margin.right, height-margin.bottom])
+
+  svg.selectAll(".voronoi")
+    .data(filteredData)
+    .enter().append("path")
+      .attr("class", "voronoi")
+  
+  svg.selectAll(".voronoi")
+    .attr("d", (d,i) => voronoi.renderCell(i))
+    .attr("stroke", "salmon")
+    .attr("fill", "none")
+  
+  svg.selectAll(".voronoi")
+    // .on("mouseenter", onMouseEnter)
+    .on("mouseover",(event, d)=>{
+      //check what we're passing to the m_over function
+      // console.log('data:', d); 
+      onMouseEnter(d);
+    })
+    .on("mouseleave", onMouseLeave)
+
+ 
+
+  console.log(voronoi)
+  // function handleVoronoiHover() {
+  //   console.log('Hovering on...')
+  // }
+
+  // function handleMouseEnter(event) {
+  //   // console.log((event, [d]) => tooltip.show(d))
+  //   console.log(event)
+  // }
+
+
+  // d3.selectAll('.voronoi-path').remove()
+  // let voronoi = null
+
+  // voronoi = d3.Delaunay
+  //   .from(filteredData, d => xScale(d.date), d => yScale(d.value))
+  //   .voronoi([0, 0, width, height])
+  //   .render();
+
+  
+  
+  // svg.append("path")
+  //   // .data(filteredData)
+  //   .attr("class", "voronoi-path")
+  //   .attr("fill", "none")
+  //   .attr("stroke", "salmon")
+  //   .attr("d", voronoi)
+  //   .on("mouseenter", handleMouseEnter)
+ 
+    
+  
       
       
 
