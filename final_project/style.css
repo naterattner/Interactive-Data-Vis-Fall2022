@@ -128,6 +128,24 @@ button.pressed {
   align-items: center !important;
 }
 
+.yAxis line {
+  stroke: #E0E0E0 !important;
+}
+
+.yAxis text {
+  font-family: 'PT Sans' !important;
+  font-size:1.2em !important;
+}
+
+.xAxis text {
+  font-family: 'PT Sans' !important;
+  font-size:1.2em !important;
+}
+
+.domain {
+  display: none !important;
+}
+
 .line {
   /* stroke:#D3D3D3;
   stroke-width:1.5; */

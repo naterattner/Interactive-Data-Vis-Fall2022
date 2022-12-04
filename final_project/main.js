@@ -2,7 +2,10 @@
 const width = window.innerWidth * 0.7,
   height = window.innerHeight * 0.7,
   margin = { top: 20, bottom: 50, left: 60, right: 60 },
-  radius = 3;
+  innerChartWidth = width - margin.left - margin.right,
+  innerChartHeight = height - margin.top - margin.bottom,
+  radius = 3
+  ;
 
 /*
 this extrapolated function allows us to replace the "G" with "B" min the case of billions.
@@ -20,6 +23,7 @@ let yScale;
 let yAxis;
 let xAxisGroup; // maybe move this to const -- won't change by data
 let yAxisGroup;
+let grid;
 let dataPointLabel;
 
 /* APPLICATION STATE */
@@ -106,28 +110,34 @@ function init() {
     .attr("transform", `translate(${0}, ${height - margin.bottom})`)
     .call(xAxis)
 
-  xAxisGroup.append("text")
-    .attr("class", 'xLabel')
-    .attr("transform", `translate(${width / 2}, ${35})`)
-    .text("Year")
+  // xAxisGroup.append("text")
+  //   .attr("class", 'xLabel')
+  //   .attr("transform", `translate(${width / 2}, ${35})`)
+  //   .text("Year")
 
   yAxisGroup = svg.append("g")
     .attr("class", "yAxis")
     .attr("transform", `translate(${margin.right}, ${0})`)
-    .call(yAxis)
+    .call(yAxis
+      .tickSizeInner(-width)
+      .tickPadding(10)
+      )
+  
 
-  yAxisGroup.append("text")
-    .attr("class", 'yLabel')
-    .attr("transform", `translate(${-45}, ${height / 2})`)
-    .attr("writing-mode", 'vertical-rl')
-    .text("Population")
+
+
+  // yAxisGroup.append("text")
+  //   .attr("class", 'yLabel')
+  //   .attr("transform", `translate(${-45}, ${height / 2})`)
+  //   .attr("writing-mode", 'vertical-rl')
+  //   .text("Population")
 
   dataPointLabel = svg.append("g")
     .attr("display", "none")
     .attr("class", "data-point-label")
 
   dataPointLabel.append("circle")
-    .attr("r", 3)
+    .attr("r", radius)
     .attr("stroke-width", 0)
     .attr("fill", "black")
   
@@ -186,7 +196,8 @@ function draw() {
   // specify line generator function
   const lineGen = d3.line()
     .x(d => xScale(d.date))
-    .y(d => yScale(d.value))  
+    .y(d => yScale(d.value))
+    .curve(d3.curveLinear)
 
 // console.log(Array.from(groupedData)[0][0])
 // console.log(Array.from(groupedData)[1][0])
@@ -200,11 +211,12 @@ function draw() {
     .attr("data-name", d => d[0]) // give each line a data-name attribute of its series name
     .attr("fill", "none")
     .attr("stroke", "#D3D3D3")
+    // .attr("stroke", "#9380B6")
     .attr("stroke-width", "0")
     .attr("d", d => lineGen(d[1]))
     .transition()
       .duration(500)
-      .attr("stroke-width", "1.5")
+      .attr("stroke-width", "2")
       
   // VORONOI AND TOOLTIPS
   // define constants and functions
@@ -268,7 +280,7 @@ function draw() {
   )
 
   // create voronoi
-  voronoi = delaunay.voronoi([margin.left, margin.top, width - margin.right, height-margin.bottom])
+  voronoi = delaunay.voronoi([margin.left, margin.top, width - margin.right + 100, height-margin.bottom])
 
   svg.selectAll(".voronoi")
     .data(filteredData)
@@ -277,7 +289,8 @@ function draw() {
   
   svg.selectAll(".voronoi")
     .attr("d", (d,i) => voronoi.renderCell(i))
-    .attr("stroke", "salmon")
+    // .attr("stroke", "salmon")
+    .attr("stroke", "none")
     .attr("fill", "none")
     .attr("opacity", 0.2)
     .attr("pointer-events", "all")
