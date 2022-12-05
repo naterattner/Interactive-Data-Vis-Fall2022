@@ -147,9 +147,9 @@ button.pressed {
 }
 
 .line {
-  /* stroke:#D3D3D3;
-  stroke-width:1.5; */
-  mix-blend-mode: multiply !important;
+  /* stroke:#D3D3D3; */
+  /* stroke-width:1.5;  */
+  /* mix-blend-mode: multiply !important; */
 }
 
 /* highlight needs to come after .line so that it overrules the black stroke */
@@ -176,4 +176,8 @@ button.pressed {
 
 .data-point-label-body {
   font-weight:500
+}
+
+.voronoi path {
+  pointer-events: all;
 }

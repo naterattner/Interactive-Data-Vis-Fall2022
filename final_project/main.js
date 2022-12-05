@@ -137,7 +137,7 @@ function init() {
 /* DRAW FUNCTION */
 // we call this everytime there is an update to the data/state
 function draw() {
-  
+
   // + FILTER DATA BASED ON STATE
   const filteredData = state.data
     .filter(d => d.category === state.selection)
@@ -197,35 +197,58 @@ function draw() {
     .attr("class", 'line')
     .attr("data-name", d => d[0]) // give each line a data-name attribute of its series name
     .attr("fill", "none")
-    .attr("stroke", "#D3D3D3")
-    // .attr("stroke", "#9380B6")
-    .attr("stroke-width", "0")
+    // .attr("stroke", "#D3D3D3")
+    .attr("stroke", "#A495C3")
+    .attr("stroke-width", 0)
+    .style("mix-blend-mode", "multiply")
     .attr("d", d => lineGen(d[1]))
     .transition()
       .duration(500)
-      .attr("stroke-width", "2")
+      .attr("stroke-width", 2)
       
   // VORONOI AND TOOLTIPS
   // define constants and functions
 
   function onMouseEnter(d) {
-    state.highlight = d.series
-    highlight(state.highlight)
+    console.log('MOUSE ENTER')
 
+    // d3.selectAll(".line")
+    //   .attr("stroke", "#9380B6")
+
+    d3.selectAll(".line")
+      .style("mix-blend-mode", null)
+      .attr("stroke", "#D3D3D3")
+
+    d3.selectAll("[data-name=" + d.series + "]")
+      .attr("stroke", "#9380B6")
+      .attr("stroke-width", "3")
+      .raise()
+    
     updateDataPointLabel(d, d.date, d.value)
   }
 
-  function onMouseLeave() {
-    state.highlight = "None"
-    highlight(state.highlight)
+  function onMouseLeave(d) {
+    console.log('MOUSE LEAVE')
+    // state.highlight = "None"
+    // highlight(state.highlight)
 
-    // dataPointLabel.attr("display", "none")
+    d3.selectAll(".line")
+      .style("mix-blend-mode", "multiply")
+      .attr("stroke", "#9380B6")
+
+    d3.selectAll("[data-name=" + d.series + "]")
+      .attr("stroke", "#9380B6")
+      .attr("stroke-width", "2")
+
+    
+
+    dataPointLabel.attr("display", "none")
+
+    
   }
 
   function updateDataPointLabel(d, x, y) {
     dataPointLabel
-      // .attr("cx", xScale(cx))
-      // .attr("cy", yScale(cy))
       .attr("transform", `translate(${xScale(x)}, ${yScale(y)})`)
       .attr("display", null)
 
@@ -289,7 +312,10 @@ function draw() {
       // console.log('data:', d); 
       onMouseEnter(d);
     })
-    .on("mouseleave", onMouseLeave)
+    .on("mouseleave",(event, d)=>{
+      onMouseLeave(d);
+    })
+    .on("touchstart", event => event.preventDefault());
 
       
       
@@ -360,7 +386,7 @@ function highlight(seriesName) {
   svg.selectAll(".line")
     .classed("highlight", false) //remove/add a class for highlight, though for now we're styline with JS
     .attr("stroke", "#D3D3D3")
-    .attr("stroke-width", 1.5)
+    .attr("stroke-width", 2)
 
   svg.selectAll("[data-name=" + seriesName + "]")
     .classed("highlight", true)
