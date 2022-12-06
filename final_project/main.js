@@ -205,6 +205,20 @@ function draw() {
     .transition()
       .duration(500)
       .attr("stroke-width", 2)
+  
+  // DRAW VERTICAL LINE FOR START OF PANDEMIC
+  const declaredPandemic = new Date("2020-03-11");
+
+  const pandemicDateLine = svg.append("line")
+    .attr("x1", xScale(declaredPandemic))
+    .attr("x2", xScale(declaredPandemic))
+    .attr("y1", margin.top) // change this to the max tick value
+    .attr("y2", height - margin.bottom)
+    .attr("stroke", "#949494")
+    .attr("stroke-width", 1.5)
+    .attr("stroke-dasharray", 5,10,5)
+    .attr("stroke-linecap", "round")
+    .attr("opacity", 0.5)
       
   // VORONOI AND TOOLTIPS
   // define constants and functions
