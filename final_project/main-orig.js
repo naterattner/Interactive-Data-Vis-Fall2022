@@ -1,12 +1,10 @@
 /* CONSTANTS AND GLOBALS */
 const width = window.innerWidth * 0.7,
   height = window.innerHeight * 0.7,
-  heightStatic = window.innerHeight * 0.4,
   margin = { top: 20, bottom: 50, left: 60, right: 60 },
   innerChartWidth = width - margin.left - margin.right,
   innerChartHeight = height - margin.top - margin.bottom,
   radius = 3
-  
   ;
 
 /*
@@ -25,20 +23,13 @@ let yScale;
 let yAxis;
 let xAxisGroup; // maybe move this to const -- won't change by data
 let yAxisGroup;
+let grid;
 let dataPointLabel;
-
-let xScaleStatic;
-let yScaleStatic;
-let xAxisStatic;
-let yAxisStatic;
-let xAxisGroupStatic;
-let yAxisGroupStatic;
 
 /* APPLICATION STATE */
 let state = {
   data: [],
-  overallData : [],
-  selection: "type", // + YOUR FILTER SELECTION -- start with type loaded
+  selection: "overall", // + YOUR FILTER SELECTION -- start with overall loaded
   highlight: "None", // YOUR HIGHLIGHT SELECTION
 };
 
@@ -47,167 +38,40 @@ let state = {
 const parseDate = d3.timeParse("%Y-%m-%d")
 
 // + SET YOUR DATA PATH
-Promise.all([
-  d3.csv('data/overall_totals.csv', d => {
-    // use custom initializer to reformat the data the way we want it
-    // ref: https://github.com/d3/d3-fetch#dsv
-    return {
-      // date: new Date(d.date),
-      date: parseDate(d.date),
-      category: d.category,
-      series: d.series,
-      value: +d.value
-    }
-  }),
-  d3.csv('data/change_from_2019_avg.csv', d => {
-    // use custom initializer to reformat the data the way we want it
-    // ref: https://github.com/d3/d3-fetch#dsv
-    return {
-      // date: new Date(d.date),
-      date: parseDate(d.date),
-      category: d.category,
-      series: d.series,
-      change_from_2019_avg: +d.change_from_2019_avg
-    }
-  }),
-]).then(([overallData, changeData]) => {
-    console.log("overall data:", overallData);
-    console.log("change data:", changeData);
-    state.data = changeData;
-    state.overallData = overallData;
+d3.csv('data/format_test.csv', d => {
+  // use custom initializer to reformat the data the way we want it
+  // ref: https://github.com/d3/d3-fetch#dsv
+  return {
+    // date: new Date(d.date),
+    date: parseDate(d.date),
+    category: d.category,
+    series: d.series,
+    value: +d.value
+  }
+})
+  .then(data => {
+    console.log("loaded data:", data);
+    state.data = data;
     init();
   });
 
 /* INITIALIZING FUNCTION */
 // this will be run *one time* when the data finishes loading in
 function init() {
-  
-  // make the static, intro chart first. We only have to do this once
-
-  const xAxisStaticStartDate = new Date("2004-02-01");
-
-  xScaleStatic = d3.scaleTime()
-    .domain(d3.extent(state.overallData, d => d.date))
-    .domain([xAxisStaticStartDate, d3.max(state.overallData, d => d.date)])
-    .range([margin.right, width - margin.left])
-    
-
-  yScaleStatic = d3.scaleLinear()
-    .domain([0, d3.max(state.overallData, d => d.value)])
-    .range([heightStatic - margin.bottom, margin.top])
-
-
-  // + AXES
-  const xAxisStatic = d3.axisBottom(xScaleStatic)
-    // .ticks(3) // limit the number of tick marks showing -- note: this is approximate
-    .tickPadding(5)
-
-  yAxisStatic = d3.axisLeft(yScaleStatic)
-    .ticks(4)
-  
-
-  // + CREATE SVG ELEMENT
-  svgStatic = d3.select("#static-chart-container")
-    .append("svg")
-    .attr("width", width)
-    .attr("height", heightStatic)
-
-  // + CALL AXES
-  xAxisGroupStatic = svgStatic.append("g")
-    .attr("class", "xAxisStatic")
-    .attr("transform", `translate(${0}, ${heightStatic - margin.bottom})`)
-    .call(xAxisStatic)
-
-  yAxisGroupStatic = svgStatic.append("g")
-    .attr("class", "yAxisStatic")
-    .attr("transform", `translate(${margin.right}, ${0})`)
-    .call(yAxisStatic
-      .tickSizeInner(-width)
-      .tickPadding(10)
-      )
-
-      svgStatic.selectAll('.yAxisStatic g line')
-      .style("stroke", "#e0e0e0")
-
-  // DRAW STATIC LINE CHART
-  // specify line generator function
-  const lineGenStatic = d3.line()
-   .x(d => xScaleStatic(d.date))
-   .y(d => yScaleStatic(d.value))
-   .curve(d3.curveLinear) 
-
- // + DRAW LINE AND/OR AREA
- const path = svgStatic.selectAll(".static-line")
-   .data([state.overallData])
-   .join("path")
-   .attr("class", 'static-line')
-  //  .attr("data-name", d => d[0]) // give each line a data-name attribute of its series name
-   .attr("fill", "none")
-   .attr("stroke", "black")
-   .attr("stroke-width", 2.5)
-   .attr("d", d => lineGenStatic(d))
-
-  // DRAW VERTICAL LINE FOR START OF PANDEMIC
-  const declaredPandemic = new Date("2020-03-11");
-
-  const pandemicDateLine = svgStatic.append("line")
-    .attr("x1", xScaleStatic(declaredPandemic))
-    .attr("x2", xScaleStatic(declaredPandemic))
-    .attr("y1", margin.top) // change this to the max tick value
-    .attr("y2", heightStatic - margin.bottom)
-    .attr("stroke", "#949494")
-    .attr("stroke-width", 1.5)
-    .attr("stroke-dasharray", 5,10,5)
-    .attr("stroke-linecap", "round")
-    .attr("opacity", 0.5)
-
-  const declaredPandemicTextLabelGroup = svgStatic.append("g")
-    .attr("transform", `translate(${xScaleStatic(declaredPandemic)}, ${yScaleStatic(50000)})`)
-    .attr("class", "pandemic-date-label")
-      // .attr("display", null)
-
-  const declaredPandemicTextLabel = declaredPandemicTextLabelGroup.append("text")
-      .text("WHO declares")
-      .attr("x", 0)
-      .attr("y", -28)
-      // .classed("data-point-label-title", true)
-
-  declaredPandemicTextLabel.append("tspan")
-      .text("Covid-19 a pandemic")
-      .attr("x", 0)
-      .attr("y", -10)
-      
-   
-
- // color us_total line black
-//  svg.selectAll("[data-name=us_total]")
-//    .attr("stroke", "black")
-//    .raise()
-
-
-
-
-
-
   // + SCALES
-  const xAxisStartDate = new Date("2019-12-01");
-
   xScale = d3.scaleTime()
-    // .domain(d3.extent(state.data, d => d.date))
-    .domain([xAxisStartDate, d3.max(state.data, d => d.date)])
+    .domain(d3.extent(state.data, d => d.date))
     .range([margin.right, width - margin.left])
 
   yScale = d3.scaleLinear()
-    .domain(d3.extent(state.data, d => d.change_from_2019_avg))
+    .domain(d3.extent(state.data, d => d.value))
     .range([height - margin.bottom, margin.top])
+
 
   // + AXES
   const xAxis = d3.axisBottom(xScale)
-    .ticks(3) // limit the number of tick marks showing -- note: this is approximate
-    .tickPadding(5)
-
+    .ticks(6) // limit the number of tick marks showing -- note: this is approximate
   yAxis = d3.axisLeft(yScale)
-    .tickFormat(d => d + "%")
     // .tickFormat(formatBillions)
 
 
@@ -267,12 +131,12 @@ function init() {
     // .attr("y", -8)
     .text(null);
 
-  draw(declaredPandemic); // calls the draw function
+  draw(); // calls the draw function
 }
 
 /* DRAW FUNCTION */
 // we call this everytime there is an update to the data/state
-function draw(declaredPandemic) {
+function draw() {
 
   // + FILTER DATA BASED ON STATE
   const filteredData = state.data
@@ -309,7 +173,7 @@ function draw(declaredPandemic) {
   });
     
   // + UPDATE SCALE(S), if needed
-  yScale.domain([d3.min(filteredData, d => d.change_from_2019_avg), d3.max(filteredData, d => d.change_from_2019_avg)]).nice()
+  yScale.domain([0, d3.max(filteredData, d => d.value)])
   // + UPDATE AXIS/AXES, if needed
   yAxisGroup
     .transition()
@@ -319,7 +183,7 @@ function draw(declaredPandemic) {
   // specify line generator function
   const lineGen = d3.line()
     .x(d => xScale(d.date))
-    .y(d => yScale(d.change_from_2019_avg))
+    .y(d => yScale(d.value))
     .curve(d3.curveLinear)
 
 // console.log(Array.from(groupedData)[0][0])
@@ -334,25 +198,20 @@ function draw(declaredPandemic) {
     .attr("data-name", d => d[0]) // give each line a data-name attribute of its series name
     .attr("fill", "none")
     // .attr("stroke", "#D3D3D3")
-    .attr("stroke", "#D3D3D3")
+    .attr("stroke", "#A495C3")
     .attr("stroke-width", 0)
     .style("mix-blend-mode", "multiply")
     .attr("d", d => lineGen(d[1]))
     .transition()
       .duration(500)
       .attr("stroke-width", 2)
-
-  // color us_total line black
-  svg.selectAll("[data-name=us_total]")
-    .attr("stroke", "black")
-    .raise()
   
   // DRAW VERTICAL LINE FOR START OF PANDEMIC
-  const declaredPandemicDash = new Date("2020-03-11");
- 
-  const pandemicDateLineDash = svg.append("line")
-    .attr("x1", xScale(declaredPandemicDash))
-    .attr("x2", xScale(declaredPandemicDash))
+  const declaredPandemic = new Date("2020-03-11");
+
+  const pandemicDateLine = svg.append("line")
+    .attr("x1", xScale(declaredPandemic))
+    .attr("x2", xScale(declaredPandemic))
     .attr("y1", margin.top) // change this to the max tick value
     .attr("y2", height - margin.bottom)
     .attr("stroke", "#949494")
@@ -360,35 +219,6 @@ function draw(declaredPandemic) {
     .attr("stroke-dasharray", 5,10,5)
     .attr("stroke-linecap", "round")
     .attr("opacity", 0.5)
-
-
-  // STYLE GRIDLINES
-  svg.selectAll('.yAxis g line')
-    .style("stroke", "#e0e0e0")
-    // .style("stroke", function() {
-    //   if arguments[0] == 0 {
-    //     return '#999999'
-    //   } else {
-    //     return '#e0e0e0'
-    //   }
-    // })
-  
-  // const zeroLineText = '0%'
-
-  // zeroLineElemParent = d3.selectAll("text")
-  // .filter(function(){ 
-  //   const zeroLineElem = d3.select(this).text() == zeroLineText
-  //   return zeroLineElem.parentElement
-  // })
-  
-  // zeroGridLine = d3.select(zeroLineElemParent)
-  // zeroLineElemParent.attr("stroke", 'red')
-
-  // console.log(zeroLineElemParent)
-
-
-  
-  
       
   // VORONOI AND TOOLTIPS
   // define constants and functions
@@ -398,55 +228,17 @@ function draw(declaredPandemic) {
 
     // d3.selectAll(".line")
     //   .attr("stroke", "#9380B6")
-    console.log(d.series)
+
+    d3.selectAll(".line")
+      .style("mix-blend-mode", null)
+      .attr("stroke", "#D3D3D3")
+
+    d3.selectAll("[data-name=" + d.series + "]")
+      .attr("stroke", "#9380B6")
+      .attr("stroke-width", "3")
+      .raise()
     
-    // d3.selectAll(".line")
-    //   .style("mix-blend-mode", null)
-    //   // .attr("stroke", "#D3D3D3")
-    //   .attr("stroke", function(d) {
-    //     if (d.series == 'us_total') {return "black"}
-    //     else {return '#D3D3D3'}
-    //   })
-
-    if (d.series === "us_total") {
-      console.log('us total!!!')
-      d3.selectAll(".line")
-        .attr("stroke", "#D3D3D3")
-        .style("mix-blend-mode", null)
-
-      d3.selectAll("[data-name=" + d.series + "]")
-        .attr("stroke", "black")
-        .style("mix-blend-mode", null)
-        .raise()
-
-    } else {
-      d3.selectAll("[data-name=" + d.series + "]")
-        .attr("stroke", "#9380B6")
-        .style("mix-blend-mode", null)
-        .raise()
-    }
-
-
-    // d3.selectAll("[data-name=" + d.series + "]")
-    //   // .attr("stroke", "#9380B6")
-    //   .attr("stroke", function(d) {
-    //     if (d.series === 'us_total') {
-    //       return "black";
-    //     } else {
-    //       return '#9380B6';
-    //     }
-    //   })
-    //   .attr("stroke-width", function(d) {
-    //     if (d.series === 'us_total') {
-    //       return 10;
-    //     } else {
-    //       return 2;
-    //     }
-    //   })
-    //   // .attr("stroke-width", "3")
-    //   .raise()
-    
-    updateDataPointLabel(d, d.date, d.change_from_2019_avg)
+    updateDataPointLabel(d, d.date, d.value)
   }
 
   function onMouseLeave(d) {
@@ -454,27 +246,13 @@ function draw(declaredPandemic) {
     // state.highlight = "None"
     // highlight(state.highlight)
 
-    // d3.selectAll(".line")
-    //   .style("mix-blend-mode", "multiply")
-    //   .attr("stroke", "#9380B6")
+    d3.selectAll(".line")
+      .style("mix-blend-mode", "multiply")
+      .attr("stroke", "#9380B6")
 
-    // d3.selectAll("[data-name=" + d.series + "]")
-    //   .attr("stroke", "#9380B6")
-    //   .attr("stroke-width", "2")
-
-    if (d.series === "us_total") {
-      d3.selectAll(".line")
-        .attr("stroke", "#D3D3D3")
-
-      d3.selectAll("[data-name=" + d.series + "]")
-        .attr("stroke", "black")
-        .raise()
-
-    } else {
-      d3.selectAll("[data-name=" + d.series + "]")
-        .attr("stroke", "#d3d3d3")
-        .style("mix-blend-mode", "multiply")
-    }
+    d3.selectAll("[data-name=" + d.series + "]")
+      .attr("stroke", "#9380B6")
+      .attr("stroke-width", "2")
 
     
 
@@ -505,7 +283,7 @@ function draw(declaredPandemic) {
       .classed("data-point-label-title", true)
 
     labelText.append("tspan")
-      .text(`${formatDateLabel(d.date)}: ` + `${formatNumberLabel(d.change_from_2019_avg)}`)
+      .text(`${formatDateLabel(d.date)}: ` + `${formatNumberLabel(d.value)}`)
       .attr("x", 0)
       .attr("y", -10)
       .classed("data-point-label-body", true)
@@ -522,7 +300,7 @@ function draw(declaredPandemic) {
   delaunay = d3.Delaunay.from(
     filteredData,
     d => xScale(d.date), 
-    d => yScale(d.change_from_2019_avg)
+    d => yScale(d.value)
   )
 
   // create voronoi
