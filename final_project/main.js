@@ -17,7 +17,6 @@ let yScale;
 let yAxis;
 let xAxisGroup; // maybe move this to const -- won't change by data
 let yAxisGroup;
-// let dataPointLabel;
 
 let xScaleStatic;
 let yScaleStatic;
@@ -135,7 +134,6 @@ function init() {
    .data([state.overallData])
    .join("path")
    .attr("class", 'static-line')
-  //  .attr("data-name", d => d[0]) // give each line a data-name attribute of its series name
    .attr("fill", "none")
    .attr("stroke", "#005d88")
    .attr("stroke-width", 2.5)
@@ -170,7 +168,7 @@ function init() {
       .attr("x", 0)
       .attr("y", -10)
 
-  //DRAW STATIC ZERO LINE
+  //DRAW STATIC CHART ZERO LINE
    zeroLineStaticEnd = new Date("2027-03-01");
  
    const zeroLineStatic = svgStatic.append("line")
@@ -183,7 +181,7 @@ function init() {
      .attr("class", "static-zero-line")
      .attr("mix-blend-mode", 'multiply')
       
-
+  // NOW SET UP DASHBOARD SECTION
   // + SCALES
   const xAxisStartDate = new Date("2019-12-01");
 
@@ -203,31 +201,6 @@ function init() {
 
   yAxis = d3.axisLeft(yScale)
     .tickFormat(d => d + "%")
-    // .tickFormat(formatBillions)
-
-
-  // + UI ELEMENT SETUP
-
-  // // Dropdown for category filter
-  // const selectElement = d3.select("#category-dropdown")
-
-  // // add in dropdown options from the unique values in the data
-  // selectElement.selectAll("option")
-  //   .data([
-  //     // manually add the first value
-  //     "Select filter",
-  //     // add in all the unique values from the dataset
-  //     ...new Set(state.data.map(d => d.category))])
-  //   .join("option")
-  //   .attr("attr", d => d)
-  //   .text(d => d)
-
-  // // + SET SELECT ELEMENT'S DEFAULT VALUE (optional)
-  // selectElement.on("change", event => {
-  //   state.selection = event.target.value
-  //   console.log('state has been updated to: ', state)
-  //   draw(); // re-draw the graph based on this new selection
-  // });
 
   // + CREATE SVG ELEMENT
   svg = d3.select("#chart-container")
@@ -248,20 +221,6 @@ function init() {
       .tickSizeInner(-width)
       .tickPadding(10)
       )
-
-  // dataPointLabel = svg.append("g")
-  //   .attr("display", "none")
-  //   .attr("class", "data-point-label")
-
-  // dataPointLabel.append("circle")
-  //   .attr("r", radius)
-  //   .attr("stroke-width", 0)
-  //   .attr("fill", "black")
-  
-  // dataPointLabel.append("text")
-  //   // .attr("y", -8)
-  //   .text(null);
-    
 
   draw(); // calls the draw function
 }
@@ -296,12 +255,7 @@ function draw() {
     state.highlight = event.target.value
     console.log('highlight has been updated to: ', state)
     console.log(state.highlight)
-    // applyLineClass()
     highlight(state.highlight);
-    
-    //append a class or otherwise change line's fill to red
-    // could trigger another function that selects lines by class but we need to add unque classes to each line for this to work
-    // draw(); // re-draw the graph based on this new selection
   });
     
   // + UPDATE SCALE(S), if needed
@@ -333,9 +287,8 @@ function draw() {
     .transition()
       .duration(750)
       .attr("stroke-width", 2.5)
-      // .attr("stroke", "#9380B6")
 
-  // color us_total line black
+  // color us_total line blue
   svg.selectAll("[data-name='U.S. Total']")
     .attr("stroke", "#005d88")
     .style("mix-blend-mode", "normal")
@@ -394,7 +347,6 @@ function draw() {
       .attr("x", 0)
       .attr("y", 5)
       .attr("fill", "#005d88")
-      // .classed("data-point-label-title", true)
       
   // VORONOI AND TOOLTIPS
   // define constants and functions
@@ -408,8 +360,8 @@ function draw() {
       console.log('us total!!!')
 
       //remove static label at end of line
-      d3.selectAll(".us-total-label")
-        .attr("display", "none");
+      // d3.selectAll(".us-total-label")
+      //   .attr("display", "none");
 
       //handle colors
       d3.selectAll(".line")
@@ -502,43 +454,6 @@ function draw() {
       .attr("x", 0)
       .attr("y", -10)
       .classed("data-point-label-body", true)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // dataPointLabel
-    //   .attr("transform", `translate(${xScale(x)}, ${yScale(y)})`)
-    //   .attr("display", null)
-
-    //   // .raise()
-    
-    // const formatDateLabel = d3.timeFormat("%b %Y")
-    // const formatNumberLabel = d3.format(".3s")
-
-    // let labelText = d3.select(".data-point-label")
-    // .selectAll("text")
-
-    // labelText.text(d.series_clean)
-    //   .attr("x", 0)
-    //   .attr("y", -28)
-    //   .classed("data-point-label-title", true)
-
-    // labelText.append("tspan")
-    //   .text(`${formatDateLabel(d.date)}: ` + `${formatNumberLabel(d.change_from_2019_avg)}` +'%')
-    //   .attr("x", 0)
-    //   .attr("y", -10)
-    //   .classed("data-point-label-body", true)
-
   }
 
   // destroy existing voronoi
@@ -583,15 +498,6 @@ function draw() {
 }
 
 
-
-
-
-
-
-
-
-
-
 // FUNCTION TO CHANGE CATEGORIES WITH BUTTONS
 function changeCategory(buttonName) {
   // change state depending on button clicked and then re-draw with draw()
@@ -606,40 +512,10 @@ function changeCategory(buttonName) {
   //give the clicked button a class for styling as "pressed"
   d3.select('#' + buttonName)
   .classed("pressed", true)
-
-  // set highlight to the series with the highest value for the most recent month
-  // const largestSeries = state.data
-  //   .filter(d => d.category === state.selection)
-    
-  // groupedData = d3
-  //   .group(largestSeries, d => d.series)
-    
-  //   console.log(groupedData)
-
-
-  //give the clicked button a class for styling as "pressed"
 }
 
-
-
-
-
-
-
-
-
-
 // HIGHLIGHT FUNCTION
-// function applyLineClass(){
-//   svg.selectAll(".line")
-//     // .attr("class", "line")
-// }
-// This applies a class based on state.highlight
 function highlight(seriesName) {
-  //select all lines and remove .highlight, then select the specific line and add .highlight
-  // other things to do in this function:
-  // - bring line to front
-  // - reset filter to default when you change category?
   console.log("highlighting " + state.highlight)    
 
   if (seriesName === "U.S. Total") {
@@ -672,48 +548,5 @@ function highlight(seriesName) {
       .style("mix-blend-mode", null)
       .attr("stroke-width", 3.5)
       .raise()
-    
-    
   }
-
-
-
-
-  // svg.selectAll(".line")
-  //   .classed("highlight", false) //remove/add a class for highlight, though for now we're styline with JS
-  //   .attr("stroke", "#D3D3D3")
-  //   .attr("stroke-width", 2)
-
-  // svg.selectAll("[data-name='" + seriesName + "']")
-  //   .classed("highlight", true)
-  //   .attr("class", "highlight line")
-  //   .raise() // bring to front
-  //   .transition()
-  //     .attr("stroke", "#9380B6")
-  //     .attr("stroke-width", 3)
 };
-
-
-// if (d.series_clean === "U.S. Total") {
-//   console.log('us total!!!')
-
-//   //remove static label at end of line
-//   d3.selectAll(".us-total-label")
-//     .attr("display", "none");
-
-//   //handle colors
-//   d3.selectAll(".line")
-//     .attr("stroke", "#e3e0c5")
-//     .style("mix-blend-mode", null)
-
-//   d3.selectAll("[data-name='" + d.series_clean + "']")
-//     .attr("stroke", "#683c8e")
-//     .style("mix-blend-mode", null)
-//     .raise()
-
-// } else {
-//   d3.selectAll("[data-name='" + d.series_clean + "']")
-//     .attr("stroke", "#ada665")
-//     .style("mix-blend-mode", null)
-//     .raise()
-// }
