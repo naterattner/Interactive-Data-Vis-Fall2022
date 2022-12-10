@@ -309,7 +309,7 @@ function draw() {
   // + UPDATE AXIS/AXES, if needed
   yAxisGroup
     .transition()
-    .duration(1000)
+    .duration(750)
     .call(yAxis.scale(yScale))// need to udpate the scale
 
   // specify line generator function
@@ -331,7 +331,7 @@ function draw() {
     .style("mix-blend-mode", "multiply")
     .attr("d", d => lineGen(d[1]))
     .transition()
-      .duration(500)
+      .duration(750)
       .attr("stroke-width", 2.5)
       // .attr("stroke", "#9380B6")
 
@@ -562,8 +562,8 @@ function draw() {
   
   svg.selectAll(".voronoi")
     .attr("d", (d,i) => voronoi.renderCell(i))
-    .attr("stroke", "salmon")
-    // .attr("stroke", "none")
+    // .attr("stroke", "salmon")
+    .attr("stroke", "none")
     .attr("fill", "none")
     .attr("opacity", 0.2)
     .attr("pointer-events", "all")
@@ -656,6 +656,7 @@ function highlight(seriesName) {
       .style("mix-blend-mode", null)
       .attr("stroke-width", 3.5)
       .raise()
+
 
   } else {
     d3.selectAll(".line")
