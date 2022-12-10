@@ -333,7 +333,7 @@ function draw() {
   const pandemicDateLineDash = svg.append("line")
     .attr("x1", xScale(declaredPandemicDash))
     .attr("x2", xScale(declaredPandemicDash))
-    .attr("y1", margin.top) // change this to the max tick value
+    .attr("y1", margin.top) 
     .attr("y2", height - margin.bottom)
     .attr("stroke", "#949494")
     .attr("stroke-width", 1.5)
@@ -346,6 +346,23 @@ function draw() {
   // STYLE GRIDLINES
   svg.selectAll('.yAxis g line')
     .style("stroke", "#e0e0e0")
+
+  // DRAW ZERO LINE
+  d3.selectAll(".dashboard-zero-line").remove();
+
+  zeroLineStart = new Date("2019-12-01");
+  // zeroLineEnd = d3.max(state.data, d => d.date)
+  zeroLineEnd = new Date("2023-01-01");
+
+  const zeroLine = svg.append("line")
+    .attr("x1", xScale(zeroLineStart))
+    .attr("x2", xScale(zeroLineEnd))
+    .attr("y1", yScale(0)) // change this to the max tick value
+    .attr("y2", yScale(0))
+    .attr("stroke", "#171717")
+    .attr("stroke-width", 1)
+    .attr("class", "dashboard-zero-line")
+    .attr("mix-blend-mode", 'multiply')
   
   // ADD U.S. TOTAL LABEL
   d3.selectAll(".us-total-label").remove();
