@@ -94,6 +94,7 @@ function init() {
   const xAxisStatic = d3.axisBottom(xScaleStatic)
     // .ticks(3) // limit the number of tick marks showing -- note: this is approximate
     .tickPadding(5)
+    .ticks(3)
 
   yAxisStatic = d3.axisLeft(yScaleStatic)
     .ticks(4)
@@ -136,7 +137,7 @@ function init() {
    .attr("class", 'static-line')
   //  .attr("data-name", d => d[0]) // give each line a data-name attribute of its series name
    .attr("fill", "none")
-   .attr("stroke", "#683c8e")
+   .attr("stroke", "#005d88")
    .attr("stroke-width", 2.5)
    .attr("d", d => lineGenStatic(d))
 
@@ -168,6 +169,19 @@ function init() {
       .text("Covid-19 a pandemic")
       .attr("x", 0)
       .attr("y", -10)
+
+  //DRAW STATIC ZERO LINE
+   zeroLineStaticEnd = new Date("2027-03-01");
+ 
+   const zeroLineStatic = svgStatic.append("line")
+     .attr("x1", xScaleStatic(xAxisStaticStartDate))
+     .attr("x2", xScaleStatic(zeroLineStaticEnd))
+     .attr("y1", yScaleStatic(0)) // change this to the max tick value
+     .attr("y2", yScaleStatic(0))
+     .attr("stroke", "#171717")
+     .attr("stroke-width", 1)
+     .attr("class", "static-zero-line")
+     .attr("mix-blend-mode", 'multiply')
       
 
   // + SCALES
@@ -323,7 +337,7 @@ function draw() {
 
   // color us_total line black
   svg.selectAll("[data-name='U.S. Total']")
-    .attr("stroke", "#683c8e")
+    .attr("stroke", "#005d88")
     .style("mix-blend-mode", "normal")
     .raise()
   
@@ -379,7 +393,7 @@ function draw() {
       .text("Total")
       .attr("x", 0)
       .attr("y", 5)
-      .attr("fill", "#683c8e")
+      .attr("fill", "#005d88")
       // .classed("data-point-label-title", true)
       
   // VORONOI AND TOOLTIPS
@@ -404,7 +418,7 @@ function draw() {
         .attr("stroke-width", 2.5)
 
       d3.selectAll("[data-name='" + d.series_clean + "']")
-        .attr("stroke", "#683c8e")
+        .attr("stroke", "#005d88")
         .style("mix-blend-mode", null)
         .attr("stroke-width", 3.5)
         .raise()
@@ -438,7 +452,7 @@ function draw() {
         .attr("stroke-width", 2.5)
 
       d3.selectAll("[data-name='" + d.series_clean + "']")
-        .attr("stroke", "#683c8e")
+        .attr("stroke", "#005d88")
         .attr("stroke-width", 2.5)
         .raise()
 
@@ -597,7 +611,7 @@ function highlight(seriesName) {
       .attr("stroke-width", 2.5)
 
     d3.selectAll("[data-name='" + seriesName + "']")
-      .attr("stroke", "#683c8e")
+      .attr("stroke", "#005d88")
       .style("mix-blend-mode", null)
       .attr("stroke-width", 3.5)
       .raise()
@@ -609,7 +623,7 @@ function highlight(seriesName) {
     .attr("stroke", "#e3e0c5")
 
     d3.selectAll("[data-name='U.S. Total']")
-      .attr("stroke", "#683c8e")
+      .attr("stroke", "#005d88")
 
     d3.selectAll("[data-name='" + seriesName + "']")
       .attr("stroke", "#ada665")
