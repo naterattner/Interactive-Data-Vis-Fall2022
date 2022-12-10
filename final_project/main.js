@@ -157,7 +157,6 @@ function init() {
   const declaredPandemicTextLabelGroup = svgStatic.append("g")
     .attr("transform", `translate(${xScaleStatic(declaredPandemic)}, ${yScaleStatic(50000)})`)
     .attr("class", "pandemic-date-label")
-      // .attr("display", null)
 
   const declaredPandemicTextLabel = declaredPandemicTextLabelGroup.append("text")
       .text("WHO declares")
@@ -327,6 +326,8 @@ function draw() {
     .raise()
   
   // DRAW VERTICAL LINE FOR START OF PANDEMIC
+  d3.selectAll(".dashboard-pandemic-line").remove();
+
   const declaredPandemicDash = new Date("2020-03-11");
  
   const pandemicDateLineDash = svg.append("line")
@@ -339,12 +340,27 @@ function draw() {
     .attr("stroke-dasharray", 5,10,5)
     .attr("stroke-linecap", "round")
     .attr("opacity", 0.5)
+    .attr("class", "dashboard-pandemic-line")
 
 
   // STYLE GRIDLINES
   svg.selectAll('.yAxis g line')
     .style("stroke", "#e0e0e0")
   
+  // ADD U.S. TOTAL LABEL
+  d3.selectAll(".us-total-label").remove();
+  const usTotalLabelDate = new Date("2022-10-05");
+
+  const usTotalLabelGroup = svg.append("g")
+    .attr("transform", `translate(${xScale(usTotalLabelDate)}, ${yScale(47.6)})`)
+    .attr("class", "us-total-label")
+      // .attr("display", null)
+
+  const usTotalTextLabel = usTotalLabelGroup.append("text")
+      .text("Total")
+      .attr("x", 0)
+      .attr("y", 5)
+      // .classed("data-point-label-title", true)
       
   // VORONOI AND TOOLTIPS
   // define constants and functions
@@ -360,6 +376,12 @@ function draw() {
   
     if (d.series_clean === "U.S. Total") {
       console.log('us total!!!')
+
+      //remove static label at end of line
+      d3.selectAll(".us-total-label")
+        .attr("display", "none");
+
+      //handle colors
       d3.selectAll(".line")
         .attr("stroke", "#D3D3D3")
         .style("mix-blend-mode", null)
@@ -367,13 +389,13 @@ function draw() {
       d3.selectAll("[data-name='" + d.series_clean + "']")
         .attr("stroke", "black")
         .style("mix-blend-mode", null)
-        // .raise()
+        .raise()
 
     } else {
       d3.selectAll("[data-name='" + d.series_clean + "']")
         .attr("stroke", "#9380B6")
         .style("mix-blend-mode", null)
-        // .raise()
+        .raise()
     }
 
     
@@ -383,7 +405,12 @@ function draw() {
   function onMouseLeave(d) {
     console.log('MOUSE LEAVE')
 
-    if (d.series_clean === "us_total") {
+    if (d.series_clean === "U.S. Total") {
+      // replace static label at end of line
+      d3.selectAll(".us-total-label")
+        .attr("display", null);
+
+      // handle colors
       d3.selectAll(".line")
         .attr("stroke", "#D3D3D3")
 

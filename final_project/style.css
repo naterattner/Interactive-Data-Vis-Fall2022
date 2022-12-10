@@ -178,8 +178,6 @@ button.pressed {
   text-anchor: middle !important;
   font-family: 'Open Sans', sans-serif !important;
   font-size: 0.9em !important;
-  position:relative !important;;
-z-index:99 !important;
 }
 
 .data-point-label-title {
@@ -188,6 +186,15 @@ z-index:99 !important;
 
 .data-point-label-body {
   font-weight:500 !important;
+}
+
+.us-total-label {
+  paint-order: stroke !important;
+  stroke-width: 3 !important;
+  stroke: #FFFFFF !important;
+  text-anchor: left !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 0.9em !important;
 }
 
 .voronoi path {
