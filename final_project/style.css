@@ -189,9 +189,6 @@ button.pressed {
 }
 
 .us-total-label {
-  paint-order: stroke !important;
-  stroke-width: 3 !important;
-  stroke: #FFFFFF !important;
   text-anchor: left !important;
   font-family: 'Open Sans', sans-serif !important;
   font-size: 0.9em !important;

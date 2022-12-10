@@ -136,7 +136,7 @@ function init() {
    .attr("class", 'static-line')
   //  .attr("data-name", d => d[0]) // give each line a data-name attribute of its series name
    .attr("fill", "none")
-   .attr("stroke", "black")
+   .attr("stroke", "#683c8e")
    .attr("stroke-width", 2.5)
    .attr("d", d => lineGenStatic(d))
 
@@ -312,17 +312,19 @@ function draw() {
     .attr("data-name", d => d[0]) // give each line a data-name attribute of its series name
     .attr("fill", "none")
     // .attr("stroke", "#D3D3D3")
-    .attr("stroke", "#D3D3D3")
+    .attr("stroke", "#e3e0c5")
     .attr("stroke-width", 0)
     .style("mix-blend-mode", "multiply")
     .attr("d", d => lineGen(d[1]))
     .transition()
       .duration(500)
-      .attr("stroke-width", 2)
+      .attr("stroke-width", 2.5)
+      // .attr("stroke", "#9380B6")
 
   // color us_total line black
   svg.selectAll("[data-name='U.S. Total']")
-    .attr("stroke", "black")
+    .attr("stroke", "#683c8e")
+    .style("mix-blend-mode", "normal")
     .raise()
   
   // DRAW VERTICAL LINE FOR START OF PANDEMIC
@@ -377,16 +379,13 @@ function draw() {
       .text("Total")
       .attr("x", 0)
       .attr("y", 5)
+      .attr("fill", "#683c8e")
       // .classed("data-point-label-title", true)
       
   // VORONOI AND TOOLTIPS
   // define constants and functions
 
   function onMouseEnter(d) {
-
-
-
-
     console.log('MOUSE ENTER')
 
     console.log(d.series_clean)
@@ -400,19 +399,25 @@ function draw() {
 
       //handle colors
       d3.selectAll(".line")
-        .attr("stroke", "#D3D3D3")
+        .attr("stroke", "#e3e0c5")
         .style("mix-blend-mode", null)
+        .attr("stroke-width", 2.5)
 
       d3.selectAll("[data-name='" + d.series_clean + "']")
-        .attr("stroke", "black")
+        .attr("stroke", "#683c8e")
         .style("mix-blend-mode", null)
+        .attr("stroke-width", 3.5)
         .raise()
 
     } else {
       d3.selectAll("[data-name='" + d.series_clean + "']")
-        .attr("stroke", "#9380B6")
+        .attr("stroke", "#ada665")
         .style("mix-blend-mode", null)
+        .attr("stroke-width", 3.5)
         .raise()
+      
+      d3.selectAll(".line")
+      .style("mix-blend-mode", null)
     }
 
     
@@ -429,16 +434,22 @@ function draw() {
 
       // handle colors
       d3.selectAll(".line")
-        .attr("stroke", "#D3D3D3")
+        .attr("stroke", "#e3e0c5")
+        .attr("stroke-width", 2.5)
 
       d3.selectAll("[data-name='" + d.series_clean + "']")
-        .attr("stroke", "black")
+        .attr("stroke", "#683c8e")
+        .attr("stroke-width", 2.5)
         .raise()
 
     } else {
       d3.selectAll("[data-name='" + d.series_clean + "']")
-        .attr("stroke", "#d3d3d3")
+        .attr("stroke", "#e3e0c5")
         .style("mix-blend-mode", "multiply")
+        .attr("stroke-width", 2.5)
+      
+      d3.selectAll(".line")
+      .style("mix-blend-mode", "multiply")
     }
 
     
@@ -513,9 +524,6 @@ function draw() {
       onMouseLeave(d);
     })
     .on("touchstart", event => event.preventDefault());
-      
-      
-
     
 }
 
@@ -579,16 +587,77 @@ function highlight(seriesName) {
   // - reset filter to default when you change category?
   console.log("highlighting " + state.highlight)    
 
-  svg.selectAll(".line")
-    .classed("highlight", false) //remove/add a class for highlight, though for now we're styline with JS
-    .attr("stroke", "#D3D3D3")
-    .attr("stroke-width", 2)
+  if (seriesName === "U.S. Total") {
+    console.log('us total!!!')
 
-  svg.selectAll("[data-name='" + seriesName + "']")
-    .classed("highlight", true)
-    .attr("class", "highlight line")
-    .raise() // bring to front
-    .transition()
-      .attr("stroke", "#9380B6")
-      .attr("stroke-width", 3)
+    //handle colors
+    d3.selectAll(".line")
+      .attr("stroke", "#e3e0c5")
+      .style("mix-blend-mode", null)
+      .attr("stroke-width", 2.5)
+
+    d3.selectAll("[data-name='" + seriesName + "']")
+      .attr("stroke", "#683c8e")
+      .style("mix-blend-mode", null)
+      .attr("stroke-width", 3.5)
+      .raise()
+
+  } else {
+    d3.selectAll(".line")
+    .style("mix-blend-mode", null)
+    .attr("stroke-width", 2.5)
+    .attr("stroke", "#e3e0c5")
+
+    d3.selectAll("[data-name='U.S. Total']")
+      .attr("stroke", "#683c8e")
+
+    d3.selectAll("[data-name='" + seriesName + "']")
+      .attr("stroke", "#ada665")
+      .style("mix-blend-mode", null)
+      .attr("stroke-width", 3.5)
+      .raise()
+    
+    
+  }
+
+
+
+
+  // svg.selectAll(".line")
+  //   .classed("highlight", false) //remove/add a class for highlight, though for now we're styline with JS
+  //   .attr("stroke", "#D3D3D3")
+  //   .attr("stroke-width", 2)
+
+  // svg.selectAll("[data-name='" + seriesName + "']")
+  //   .classed("highlight", true)
+  //   .attr("class", "highlight line")
+  //   .raise() // bring to front
+  //   .transition()
+  //     .attr("stroke", "#9380B6")
+  //     .attr("stroke-width", 3)
 };
+
+
+// if (d.series_clean === "U.S. Total") {
+//   console.log('us total!!!')
+
+//   //remove static label at end of line
+//   d3.selectAll(".us-total-label")
+//     .attr("display", "none");
+
+//   //handle colors
+//   d3.selectAll(".line")
+//     .attr("stroke", "#e3e0c5")
+//     .style("mix-blend-mode", null)
+
+//   d3.selectAll("[data-name='" + d.series_clean + "']")
+//     .attr("stroke", "#683c8e")
+//     .style("mix-blend-mode", null)
+//     .raise()
+
+// } else {
+//   d3.selectAll("[data-name='" + d.series_clean + "']")
+//     .attr("stroke", "#ada665")
+//     .style("mix-blend-mode", null)
+//     .raise()
+// }
