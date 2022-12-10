@@ -9,14 +9,6 @@ const width = window.innerWidth * 0.7,
   
   ;
 
-/*
-this extrapolated function allows us to replace the "G" with "B" min the case of billions.
-we cannot do this in the .tickFormat() because we need to pass a function as an argument,
-and replace needs to act on the text (result of the function).
-*/
-// const formatBillions = (num) => d3.format(".2s")(num).replace(/G/, 'B')
-// const formatDate = d3.timeFormat("%Y")
-
 // these variables allow us to access anything we manipulate in init() but need access to in draw().
 // All these variables are empty before we assign something to them.
 let svg;
@@ -67,6 +59,7 @@ Promise.all([
       date: parseDate(d.date),
       category: d.category,
       series: d.series,
+      series_clean: d.series_clean,
       change_from_2019_avg: +d.change_from_2019_avg
     }
   }),
@@ -177,17 +170,6 @@ function init() {
       .attr("x", 0)
       .attr("y", -10)
       
-   
-
- // color us_total line black
-//  svg.selectAll("[data-name=us_total]")
-//    .attr("stroke", "black")
-//    .raise()
-
-
-
-
-
 
   // + SCALES
   const xAxisStartDate = new Date("2019-12-01");
@@ -266,20 +248,21 @@ function init() {
   dataPointLabel.append("text")
     // .attr("y", -8)
     .text(null);
+    
 
-  draw(declaredPandemic); // calls the draw function
+  draw(); // calls the draw function
 }
 
 /* DRAW FUNCTION */
 // we call this everytime there is an update to the data/state
-function draw(declaredPandemic) {
+function draw() {
 
   // + FILTER DATA BASED ON STATE
   const filteredData = state.data
     .filter(d => d.category === state.selection)
   
   // GROUP DATA BY SERIES SO THAT WE CAN CHART INDIVIDUAL LINES
-  const groupedData = d3.group(filteredData, d => d.series)
+  const groupedData = d3.group(filteredData, d => d.series_clean)
 
   // UPDATE SERIES HIGHLIGHT DROPDOWN
   const highlightElement = d3.select("#series-dropdown")
@@ -290,7 +273,7 @@ function draw(declaredPandemic) {
       // manually add the first value
       "Use dropdown to highlight",
       // add in all the unique values from the dataset
-      ...new Set(filteredData.map(d => d.series))])
+      ...new Set(filteredData.map(d => d.series_clean))])
     .join("option")
     .attr("attr", d => d)
     .text(d => d)
@@ -322,10 +305,6 @@ function draw(declaredPandemic) {
     .y(d => yScale(d.change_from_2019_avg))
     .curve(d3.curveLinear)
 
-// console.log(Array.from(groupedData)[0][0])
-// console.log(Array.from(groupedData)[1][0])
-  
-
   // + DRAW LINE AND/OR AREA
   const path = svg.selectAll(".line")
     .data(groupedData)
@@ -343,7 +322,7 @@ function draw(declaredPandemic) {
       .attr("stroke-width", 2)
 
   // color us_total line black
-  svg.selectAll("[data-name=us_total]")
+  svg.selectAll("[data-name='U.S. Total']")
     .attr("stroke", "black")
     .raise()
   
@@ -365,152 +344,90 @@ function draw(declaredPandemic) {
   // STYLE GRIDLINES
   svg.selectAll('.yAxis g line')
     .style("stroke", "#e0e0e0")
-    // .style("stroke", function() {
-    //   if arguments[0] == 0 {
-    //     return '#999999'
-    //   } else {
-    //     return '#e0e0e0'
-    //   }
-    // })
-  
-  // const zeroLineText = '0%'
-
-  // zeroLineElemParent = d3.selectAll("text")
-  // .filter(function(){ 
-  //   const zeroLineElem = d3.select(this).text() == zeroLineText
-  //   return zeroLineElem.parentElement
-  // })
-  
-  // zeroGridLine = d3.select(zeroLineElemParent)
-  // zeroLineElemParent.attr("stroke", 'red')
-
-  // console.log(zeroLineElemParent)
-
-
-  
   
       
   // VORONOI AND TOOLTIPS
   // define constants and functions
 
   function onMouseEnter(d) {
+
+
+
+
     console.log('MOUSE ENTER')
 
-    // d3.selectAll(".line")
-    //   .attr("stroke", "#9380B6")
-    console.log(d.series)
-    
-    // d3.selectAll(".line")
-    //   .style("mix-blend-mode", null)
-    //   // .attr("stroke", "#D3D3D3")
-    //   .attr("stroke", function(d) {
-    //     if (d.series == 'us_total') {return "black"}
-    //     else {return '#D3D3D3'}
-    //   })
-
-    if (d.series === "us_total") {
+    console.log(d.series_clean)
+  
+    if (d.series_clean === "U.S. Total") {
       console.log('us total!!!')
       d3.selectAll(".line")
         .attr("stroke", "#D3D3D3")
         .style("mix-blend-mode", null)
 
-      d3.selectAll("[data-name=" + d.series + "]")
+      d3.selectAll("[data-name='" + d.series_clean + "']")
         .attr("stroke", "black")
         .style("mix-blend-mode", null)
-        .raise()
+        // .raise()
 
     } else {
-      d3.selectAll("[data-name=" + d.series + "]")
+      d3.selectAll("[data-name='" + d.series_clean + "']")
         .attr("stroke", "#9380B6")
         .style("mix-blend-mode", null)
-        .raise()
+        // .raise()
     }
 
-
-    // d3.selectAll("[data-name=" + d.series + "]")
-    //   // .attr("stroke", "#9380B6")
-    //   .attr("stroke", function(d) {
-    //     if (d.series === 'us_total') {
-    //       return "black";
-    //     } else {
-    //       return '#9380B6';
-    //     }
-    //   })
-    //   .attr("stroke-width", function(d) {
-    //     if (d.series === 'us_total') {
-    //       return 10;
-    //     } else {
-    //       return 2;
-    //     }
-    //   })
-    //   // .attr("stroke-width", "3")
-    //   .raise()
     
     updateDataPointLabel(d, d.date, d.change_from_2019_avg)
   }
 
   function onMouseLeave(d) {
     console.log('MOUSE LEAVE')
-    // state.highlight = "None"
-    // highlight(state.highlight)
 
-    // d3.selectAll(".line")
-    //   .style("mix-blend-mode", "multiply")
-    //   .attr("stroke", "#9380B6")
-
-    // d3.selectAll("[data-name=" + d.series + "]")
-    //   .attr("stroke", "#9380B6")
-    //   .attr("stroke-width", "2")
-
-    if (d.series === "us_total") {
+    if (d.series_clean === "us_total") {
       d3.selectAll(".line")
         .attr("stroke", "#D3D3D3")
 
-      d3.selectAll("[data-name=" + d.series + "]")
+      d3.selectAll("[data-name='" + d.series_clean + "']")
         .attr("stroke", "black")
         .raise()
 
     } else {
-      d3.selectAll("[data-name=" + d.series + "]")
+      d3.selectAll("[data-name='" + d.series_clean + "']")
         .attr("stroke", "#d3d3d3")
         .style("mix-blend-mode", "multiply")
     }
 
     
 
-    dataPointLabel.attr("display", "none")
-
+    // dataPointLabel.attr("display", "none")
+  
     
   }
 
   function updateDataPointLabel(d, x, y) {
+
     dataPointLabel
       .attr("transform", `translate(${xScale(x)}, ${yScale(y)})`)
       .attr("display", null)
 
-      .raise()
+      // .raise()
     
-    // d3.select(".data-point-label")
-    // .selectAll("text")
-    //   .text(d.series)
     const formatDateLabel = d3.timeFormat("%b %Y")
     const formatNumberLabel = d3.format(".3s")
 
     let labelText = d3.select(".data-point-label")
     .selectAll("text")
 
-    labelText.text(d.series)
+    labelText.text(d.series_clean)
       .attr("x", 0)
       .attr("y", -28)
       .classed("data-point-label-title", true)
 
     labelText.append("tspan")
-      .text(`${formatDateLabel(d.date)}: ` + `${formatNumberLabel(d.change_from_2019_avg)}`)
+      .text(`${formatDateLabel(d.date)}: ` + `${formatNumberLabel(d.change_from_2019_avg)}` +'%')
       .attr("x", 0)
       .attr("y", -10)
       .classed("data-point-label-body", true)
-
- 
 
   }
 
@@ -552,7 +469,6 @@ function draw(declaredPandemic) {
       onMouseLeave(d);
     })
     .on("touchstart", event => event.preventDefault());
-
       
       
 
@@ -624,7 +540,7 @@ function highlight(seriesName) {
     .attr("stroke", "#D3D3D3")
     .attr("stroke-width", 2)
 
-  svg.selectAll("[data-name=" + seriesName + "]")
+  svg.selectAll("[data-name='" + seriesName + "']")
     .classed("highlight", true)
     .attr("class", "highlight line")
     .raise() // bring to front

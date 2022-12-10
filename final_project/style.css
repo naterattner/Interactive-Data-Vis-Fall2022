@@ -159,6 +159,7 @@ button.pressed {
   /* stroke:#D3D3D3; */
   /* stroke-width:1.5;  */
   /* mix-blend-mode: multiply !important; */
+  pointer-events: none;
 }
 
 /* highlight needs to come after .line so that it overrules the black stroke */
@@ -177,16 +178,18 @@ button.pressed {
   text-anchor: middle !important;
   font-family: 'Open Sans', sans-serif !important;
   font-size: 0.9em !important;
+  position:relative !important;;
+z-index:99 !important;
 }
 
 .data-point-label-title {
-  font-weight:700
+  font-weight:700 !important;
 }
 
 .data-point-label-body {
-  font-weight:500
+  font-weight:500 !important;
 }
 
 .voronoi path {
-  pointer-events: all;
+  pointer-events: all !important;
 }
