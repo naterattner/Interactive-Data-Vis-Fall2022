@@ -17,7 +17,7 @@ let yScale;
 let yAxis;
 let xAxisGroup; // maybe move this to const -- won't change by data
 let yAxisGroup;
-let dataPointLabel;
+// let dataPointLabel;
 
 let xScaleStatic;
 let yScaleStatic;
@@ -249,18 +249,18 @@ function init() {
       .tickPadding(10)
       )
 
-  dataPointLabel = svg.append("g")
-    .attr("display", "none")
-    .attr("class", "data-point-label")
+  // dataPointLabel = svg.append("g")
+  //   .attr("display", "none")
+  //   .attr("class", "data-point-label")
 
-  dataPointLabel.append("circle")
-    .attr("r", radius)
-    .attr("stroke-width", 0)
-    .attr("fill", "black")
+  // dataPointLabel.append("circle")
+  //   .attr("r", radius)
+  //   .attr("stroke-width", 0)
+  //   .attr("fill", "black")
   
-  dataPointLabel.append("text")
-    // .attr("y", -8)
-    .text(null);
+  // dataPointLabel.append("text")
+  //   // .attr("y", -8)
+  //   .text(null);
     
 
   draw(); // calls the draw function
@@ -454,7 +454,6 @@ function draw() {
       d3.selectAll("[data-name='" + d.series_clean + "']")
         .attr("stroke", "#005d88")
         .attr("stroke-width", 2.5)
-        .raise()
 
     } else {
       d3.selectAll("[data-name='" + d.series_clean + "']")
@@ -465,22 +464,28 @@ function draw() {
       d3.selectAll(".line")
       .style("mix-blend-mode", "multiply")
     }
-
-    
-
-    // dataPointLabel.attr("display", "none")
-  
     
   }
 
   function updateDataPointLabel(d, x, y) {
 
-    dataPointLabel
-      .attr("transform", `translate(${xScale(x)}, ${yScale(y)})`)
-      .attr("display", null)
-
-      // .raise()
+    //remove any existing datapointlabel (tooltip)
+    d3.selectAll(".data-point-label").remove()
     
+    //create and display datapointlabel (tooltip) 
+    const dataPointLabel = svg.append("g")
+      .attr("class", "data-point-label")
+      .attr("transform", `translate(${xScale(x)}, ${yScale(y)})`)
+
+    dataPointLabel.append("circle")
+      .attr("r", radius)
+      .attr("stroke-width", 0)
+      .attr("fill", "black")
+    
+    dataPointLabel.append("text")
+      // .attr("y", -8)
+      .text(null);
+
     const formatDateLabel = d3.timeFormat("%b %Y")
     const formatNumberLabel = d3.format(".3s")
 
@@ -497,6 +502,42 @@ function draw() {
       .attr("x", 0)
       .attr("y", -10)
       .classed("data-point-label-body", true)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // dataPointLabel
+    //   .attr("transform", `translate(${xScale(x)}, ${yScale(y)})`)
+    //   .attr("display", null)
+
+    //   // .raise()
+    
+    // const formatDateLabel = d3.timeFormat("%b %Y")
+    // const formatNumberLabel = d3.format(".3s")
+
+    // let labelText = d3.select(".data-point-label")
+    // .selectAll("text")
+
+    // labelText.text(d.series_clean)
+    //   .attr("x", 0)
+    //   .attr("y", -28)
+    //   .classed("data-point-label-title", true)
+
+    // labelText.append("tspan")
+    //   .text(`${formatDateLabel(d.date)}: ` + `${formatNumberLabel(d.change_from_2019_avg)}` +'%')
+    //   .attr("x", 0)
+    //   .attr("y", -10)
+    //   .classed("data-point-label-body", true)
 
   }
 
@@ -521,8 +562,8 @@ function draw() {
   
   svg.selectAll(".voronoi")
     .attr("d", (d,i) => voronoi.renderCell(i))
-    // .attr("stroke", "salmon")
-    .attr("stroke", "none")
+    .attr("stroke", "salmon")
+    // .attr("stroke", "none")
     .attr("fill", "none")
     .attr("opacity", 0.2)
     .attr("pointer-events", "all")
