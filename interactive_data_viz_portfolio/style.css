@@ -1,23 +1,23 @@
 /* PAGE STYLES*/
 
 td, th {
-  border: 1px solid #777;
-  padding: 0.5rem;
-  text-align: center;
-  font-weight:300;
+  border: 1px solid #777 !important;
+  padding: 0.5rem !important;
+  text-align: center !important;
+  font-weight:300 !important;
 }
 
 table {
-  border-collapse: collapse;
-  margin-bottom: 25px;
+  border-collapse: collapse !important;
+  margin-bottom: 25px !important;
 }
 
 tbody tr:nth-child(odd) {
-  background: #eee;
+  background: #eee !important;
 }
 
 tbody tr:nth-child(1) {
-  background: rgb(195, 195, 195);
+  background: rgb(195, 195, 195) !important;
   
 }
 
@@ -60,19 +60,19 @@ p {
 }
 
 .section-header {
-  margin-bottom: 15px;
-  margin-top: 15px;
+  margin-bottom: 15px !important;
+  margin-top: 15px !important;
 }
 
 .section-subhead {
-  font-weight: 300;
-  text-decoration: underline;
+  font-weight: 300 !important;
+  text-decoration: underline !important;
   /* font-style: italic; */
 }
 
 img {
-  border: 2px solid #747474;
-  margin-bottom: 25px;
+  border: 2px solid #747474 !important;
+  margin-bottom: 25px !important;
 }
 
 /* UI ELEMENT STYLES*/
