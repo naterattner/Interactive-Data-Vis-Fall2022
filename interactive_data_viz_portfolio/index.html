@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <title>Portfolio | DATA73200 Interactive Data Visualization</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@200;300;500;600&family=Oswald:wght@400&family=PT+Sans:wght@400">
+  </head>
+
+  <body>
+    <div id="content-wrapper">
+      <h1 id="headline">Interactive Data Visualization Portfolio</h1>
+      <div class="intro-container">
+        <p>
+          Collection of coursework completed during Interactive Data Visualization (DATA73200), with reflections on learnings throughout the fall 2022 semester.
+        </p>
+        <div class="section-header">Links to coursework</div>
+        <table>
+          <tr>
+            <th>Tutorial</th>
+            <th>Github Repo</th>
+            <th>Deployed Link</th>    
+          </tr>
+          <tr>
+            <td>1-1</td>
+            <td><a href="https://github.com/naterattner/Interactive-Data-Vis-Fall2022/tree/main/1_1_getting_started">Repo</a></td>    
+            <td><a href="https://naterattner.com/Interactive-Data-Vis-Fall2022/1_1_getting_started/">Deployed</a></td>    
+          </tr>
+          <tr>
+            <td>1-2</td>
+            <td><a href="https://github.com/naterattner/Interactive-Data-Vis-Fall2022/tree/main/1_2_basic_html">Repo</a></td>    
+            <td><a href="https://naterattner.com/Interactive-Data-Vis-Fall2022/1_2_basic_html/">Deployed</a></td>    
+          </tr>
+          <tr>
+            <td>1-3</td>
+            <td><a href="https://github.com/naterattner/Interactive-Data-Vis-Fall2022/tree/main/1_3_intro_to_js">Repo</a></td>    
+            <td><a href="https://naterattner.com/Interactive-Data-Vis-Fall2022/1_3_intro_to_js/">Deployed</a></td>    
+          <tr>
+            <td>2-1</td>
+            <td><a href="">Repo</a></td>    
+            <td><a href="https://naterattner.com/Interactive-Data-Vis-Fall2022/2_1_quantities_and_amounts/">Deployed</a></td>        
+          </tr>
+          <tr>
+            <td>2-2</td>
+            <td><a href="">Repo</a></td>    
+            <td><a href="https://naterattner.com/Interactive-Data-Vis-Fall2022/2_2_distributions/">Deployed</a></td>    
+          </tr>
+          <tr>
+            <td>2-3</td>
+            <td><a href="">Repo</a></td>    
+            <td><a href="https://naterattner.com/Interactive-Data-Vis-Fall2022/2_3_time_series/">Deployed</a></td>    
+          </tr>
+          <tr>
+            <td>2-4</td>
+            <td><a href="">Repo</a></td>    
+            <td><a href="https://naterattner.com/Interactive-Data-Vis-Fall2022/2_4_geographic/">Deployed</a></td>    
+          </tr>
+          <tr>
+            <td>Final project</td>
+            <td><a href="">Repo</a></td>    
+            <td><a href="https://naterattner.com/Interactive-Data-Vis-Fall2022/final_project/index.html">Deployed</a></td>    
+          </tr>
+      </table>
+        <div class="section-header">Updated tutorial</div>
+        <p>Added a new, previously unsubmitted tutorial: <a href="https://naterattner.com/Interactive-Data-Vis-Fall2022/3_2_distributions/index.html">3-2 Distributions</a>. </p>
+        <div class="section-header">Final project reflection</div>
+        <img src="imgs/final_project_screenshot.png" width="50%">
+        <div class="section-subhead">Abstract</div>
+        <p>
+          Americans formed new businesses in historic numbers during the pandemic. Monthly business applications spiked to the highest level on record in early 2020 and haven’t slowed since. 
+        </p>
+        <p>
+          This dashboard will allow users to explore the U.S. Census Bureau’s Business Formation Statistics data and better understand and explain who and what is driving this trend.
+        </p>
+        <div class="section-subhead">Design decision and process</div>
+        <p>
+          I aimed to strike a balance in this piece of providing top-level insights that readers could glean at a glance while offering tools for users to dig deeper into the data. 
+        </p>
+        <p>
+          Part of this is achieved through the dashboard component at the bottom of the page, which gives users the ability to filter and highlight data by category and series. But another, key component is the smaller chart that readers see upon landing on the page; this longer-term view gives readers a sense of the overall trend and prepares readers for the more granular data further down the page.
+        </p>
+        <p>
+          In the future, I plan to add an additional step to my design process. In this project I went from a high-level wireframe straight into building the piece with code. In hindsight, I should have built every piece of the dashboard – each filtered category, in this case – into the wireframe, to get a better sense of how all of the pieces would fit together holistically. If I’d done so, I might have avoided a late change to my project, which involved removing one of the categories from the dashboard, performing additional data analysis, and adding a new chart at the top.
+        </p>
+        <div class="section-subhead">Learning and takeaways</div>
+        <p>
+          From a process perspective, my biggest learning was about the value of working through the design process prior to building. I was eager to start coding in order to finish the project on time, but after piecing together my initial draft, I realized that the project needed reworking. It not only took more time to go back and add additional components, but it made my code messier and less readable. Rather than thinking through a smart approach to expand my script to account for these additional components, I rushed through and hard-coded many elements.
+        </p>
+        <p>
+          From a technical perspective, I learned a lot about mouse interactions and enabling tooltips on busy charts that contain many elements. At the start of the process, I thought adding tooltips on a multi-line chart, like <a href="https://observablehq.com/@d3/multi-line-chart">this Observable notebook</a>, would be a long shot and that I’d likely go without any hover interaction. I ended up getting tooltips (and the closest data point) to show on hover in a relatively smooth fashion using a voronoi overlay, and I think it added a lot to the project.
+        </p>
+        <div class="section-subhead">Learning and takeaways</div>
+        <p>
+          As mentioned above, my code is not as clean, readable, and reproducible as I’d like it to be. With more time, I would have liked to refactor it to make some of its components more reusable for future projects. Or ideally, I would have planned my project better so that I could have worked toward this from the start.
+        </p>
+        <p>
+          I’d also like to focus more on animation in future projects, or in another iteration of this project. When switching between categories using the dashboard’s user interface, the data is properly filtered, the axes transition, and new lines appear, but the lines do not transition in a meaningful way. 
+        </p>
+        <p>
+          To help reinforce the enter/update/exit concept and test out different types of transitions, I completed <a href="https://naterattner.com/Interactive-Data-Vis-Fall2022/3_2_distributions/index.html">tutorial 3-2</a>. The transitions done there – such as shrinking the circles so that they “disappear” off the page – feel more valuable for the user than what I have in my final project.
+        </p>
+        <p>
+          In another iteration of this project, I’d like to animate each line’s path so that the chart is “redrawn” when the data is filter, as shown in <a href="https://observablehq.com/@onoratod/animate-a-path-in-d3">this notebook</a>. This would reinforce the idea that new data is being flowed into the chart when each category button is clicked.
+        </p>
+      </div>
+
+
+      
+      
+    
+      <div id="chart-container"></div>
+    </div>
+    <script src="../lib/d3.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
