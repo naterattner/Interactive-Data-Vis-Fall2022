@@ -1,0 +1,236 @@
+/* PAGE STYLES*/
+
+td, th {
+  border: 1px solid #777 !important;
+  padding: 0.5rem !important;
+  text-align: center !important;
+  font-weight:300 !important;
+}
+
+table {
+  border-collapse: collapse !important;
+  margin-bottom: 25px !important;
+}
+
+tbody tr:nth-child(odd) {
+  background: #eee !important;
+}
+
+tbody tr:nth-child(1) {
+  background: rgb(195, 195, 195) !important;
+  
+}
+
+
+body {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 16px !important;
+  padding: 1em !important;
+}
+
+#content-wrapper{
+  width: 95% !important;
+}
+
+h1 {
+  font-size: 3em !important;
+  margin: 0.25em 0 !important;
+}
+
+h3 {
+  font-size: 2em !important;
+  margin: 0.25em 0 !important;
+}
+
+p {
+  font-size: 1em !important;
+  font-weight:300 !important;
+}
+
+#headline {
+  text-align:center !important;
+  font-weight:400 !important;
+  font-family: 'Oswald' !important;
+}
+
+.intro-container{
+  width:70% !important;
+  margin:0 auto !important;
+  margin-bottom:30px !important;
+}
+
+.section-header {
+  margin-bottom: 15px !important;
+  margin-top: 15px !important;
+}
+
+.section-subhead {
+  font-weight: 300 !important;
+  text-decoration: underline !important;
+  /* font-style: italic; */
+}
+
+img {
+  border: 2px solid #747474 !important;
+  margin-bottom: 25px !important;
+}
+
+/* UI ELEMENT STYLES*/
+.ui-elements {
+  margin-bottom:30px !important;
+}
+
+#chart-title{
+  text-align: center !important;
+  font-size: 1.1em !important;
+  font-weight: 600 !important;
+  margin-bottom: 10px !important;
+  
+}
+
+.category-button-block {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin-bottom:5px !important;
+}
+
+.highlight-filter-block {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.highlight-filter-block label{
+  margin-right: 5px !important;
+  font-size:0.9em !important;
+  font-style:italic !important;
+  font-weight:300 !important;
+}
+
+#series-dropdown {
+  font-size:0.9em !important;
+  font-weight:200 !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: 1px solid #747474 !important;
+  text-align:center !important;
+  /* font-style:italic; */
+}
+
+button {
+  text-transform: uppercase !important;
+  margin: 7px !important;
+  font-size:0.8em !important;
+
+  background-color: #FFFFFF !important;
+  border: 1px solid #222222 !important;
+  border-radius: 3px !important;
+  box-sizing: border-box !important;
+  color: #222222 !important;
+  cursor: pointer !important;
+  display: inline-block !important;
+  line-height: 20px !important;
+  outline: none !important;
+  padding: 5px 8px !important; 
+  position: relative !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  touch-action: manipulation !important;
+  transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  width: auto !important;
+}
+
+button:hover {
+  background-color: #f0f0f0 !important;
+  /* border-color: #000000; */
+}
+
+button.pressed {
+  background-color: #f0f0f0 !important;
+  /* border-color: #000000; */
+  transform: scale(1.02) !important;
+}
+
+/* CHART STYLES */
+.pandemic-date-label {
+  paint-order: stroke !important;
+  stroke-width: 3 !important;
+  stroke: #FFFFFF !important;
+  text-anchor: middle !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 0.8em !important;
+}
+
+#chart-container {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+
+
+.yAxis line {
+  /* stroke: #E0E0E0 !important; */
+}
+
+.yAxis text, .yAxisStatic text {
+  font-family: 'PT Sans' !important;
+  font-size:1.2em !important;
+}
+
+.xAxis text, .xAxisStatic text {
+  font-family: 'PT Sans' !important;
+  font-size:1.2em !important;
+}
+
+.domain {
+  display: none !important;
+}
+
+.line {
+  /* stroke:#D3D3D3; */
+  /* stroke-width:1.5;  */
+  /* mix-blend-mode: multiply !important; */
+  pointer-events: none;
+}
+
+/* highlight needs to come after .line so that it overrules the black stroke */
+.highlight { 
+  /* stroke: #9380B6;
+  stroke-width:3;
+  transition: stroke 1s ease;
+  transition: stroke-width 1s ease; */
+  mix-blend-mode: normal !important;
+}
+
+.data-point-label {
+  paint-order: stroke !important;
+  stroke-width: 3 !important;
+  stroke: #FFFFFF !important;
+  text-anchor: middle !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 0.9em !important;
+}
+
+.data-point-label-title {
+  font-weight:700 !important;
+}
+
+.data-point-label-body {
+  font-weight:500 !important;
+}
+
+.us-total-label {
+  text-anchor: left !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 0.9em !important;
+}
+
+
+.voronoi path {
+  pointer-events: all !important;
+}
